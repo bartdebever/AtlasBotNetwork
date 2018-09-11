@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.Core" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AtlasModels\AtlasModels.csproj" />
+    <ProjectReference Include="..\ChampionGgApiHandler\ChampionGgApiHandler.csproj" />
+    <ProjectReference Include="..\KhApiHandler\KhApiHandler.csproj" />
+    <ProjectReference Include="..\SmashggHandler\SmashggHandler.csproj" />
+    <ProjectReference Include="..\SpeedrunAPIHandler\SpeedrunAPIHandler.csproj" />
+    <ProjectReference Include="..\YoutubeApiHandler\YoutubeApiHandler.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
+    <Copy SourceFiles="appsettings.json" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="CopyToOutOnPublish" AfterTargets="Publish">
+    <Copy SourceFiles="appsettings.json" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
