@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
+using AtlasBotCommander.Loggers;
 using AtlasModels.Logging;
 
 namespace AtlasBotCommander.Communication
@@ -26,8 +27,8 @@ namespace AtlasBotCommander.Communication
 
         public void Listen()
         {
-            IPAddress ipAddress = IPAddress.Parse(_ip);
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, _port);
+            var ipAddress = IPAddress.Parse(_ip);
+            var localEndPoint = new IPEndPoint(ipAddress, _port);
             _listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _listener.Bind(localEndPoint);
             _listener.Listen(100);
@@ -38,7 +39,6 @@ namespace AtlasBotCommander.Communication
                 var node = new AtlasNode(_nodes.Count.ToString(), socket);
                 _nodes.Add(node);
                 new Thread(() => ListenForData(node)).Start();
-                Console.WriteLine($"Received new node: {node.Name}");
             }
         }
 
@@ -54,9 +54,7 @@ namespace AtlasBotCommander.Communication
                 }
                 catch (SocketException)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"[{DateTime.Now}] {node.Name} Disconnected");
-                    Console.ResetColor();
+                    DefaultLogger.Logger(new LogMessage(node.Name, null, "Disconnected", 1, 0));
                     _nodes.Remove(node);
                     
                     return;
@@ -80,21 +78,15 @@ namespace AtlasBotCommander.Communication
                     if (message.Message != _token)
                     {
                         _nodes.Remove(node);
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"[{DateTime.Now}] [{message.Node}] had an invalid token! ip {(node.Socket.RemoteEndPoint as IPEndPoint)?.Address}");
-                        Console.ResetColor();
+                        DefaultLogger.Logger(new LogMessage(message.Node, message.Module, $"Invalid token detected for ip {(node.Socket.RemoteEndPoint as IPEndPoint)?.Address}", 1, 0));
                         node.Socket.Disconnect(true);
                         return;
                     }
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"[{DateTime.Now}] [{message.Node}] registered with token {message.Message}");
+                    DefaultLogger.Logger(new LogMessage(message.Node, message.Module, message.Message, 3, 0));
                     node.Name = message.Node;
-                    Console.ResetColor();
                     break;
                 case 1:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"[{DateTime.Now}] [{node.Name}]: {message.Message}");
-                    Console.ResetColor();
+                    DefaultLogger.Logger(message);
                     break;
             }
         }

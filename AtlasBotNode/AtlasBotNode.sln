@@ -11,11 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmashggHandler", "SmashggHa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtlasTest", "AtlasTest\AtlasTest.csproj", "{95A4A6E5-CE1F-4B71-9A06-225DDB34DBBC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FE901D86-4055-4559-B1B1-DF53BC83FAAB}"
-	ProjectSection(SolutionItems) = preProject
-		.gitlab-ci.yml = .gitlab-ci.yml
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeedrunAPIHandler", "SpeedrunAPIHandler\SpeedrunAPIHandler.csproj", "{24382D46-1FD6-4A94-8EE7-114183AC1434}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API Handlers", "API Handlers", "{EBAD2684-2CDF-49AB-B215-15E7BD0B325C}"
@@ -24,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KhApiHandler", "KhApiHandle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChampionGgApiHandler", "ChampionGgApiHandler\ChampionGgApiHandler.csproj", "{B289FEAD-9CD0-4386-B0ED-C77AC7072539}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeApiHandler", "YoutubeApiHandler\YoutubeApiHandler.csproj", "{02BBE03A-7F6E-405E-A52D-BC3FDF2FD325}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoutubeApiHandler", "YoutubeApiHandler\YoutubeApiHandler.csproj", "{02BBE03A-7F6E-405E-A52D-BC3FDF2FD325}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

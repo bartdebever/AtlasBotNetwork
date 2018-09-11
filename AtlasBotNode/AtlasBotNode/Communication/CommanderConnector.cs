@@ -3,7 +3,9 @@ using System.IO;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
-using AtlasModels.Logging;
+using Discord;
+using LogMessage = AtlasModels.Logging.LogMessage;
+
 namespace AtlasBotNode.Communication
 {
     public class CommanderConnector
@@ -41,7 +43,18 @@ namespace AtlasBotNode.Communication
 
         public Task LogDiscord(Discord.LogMessage logMessage)
         {
-            var message = new LogMessage(_nodeName, null, logMessage.Message, 0, 1);
+            var level = 0;
+            switch (logMessage.Severity)
+            {
+                case LogSeverity.Warning:
+                    level = 2;
+                    break;
+                case LogSeverity.Error:
+                case LogSeverity.Critical:
+                    level = 1;
+                    break;
+            }
+            var message = new LogMessage(_nodeName, null, logMessage.Message, level, 1);
             SendLogMessage(message);
             return Task.CompletedTask;
         }
