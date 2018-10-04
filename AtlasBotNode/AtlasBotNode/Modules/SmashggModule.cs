@@ -53,5 +53,12 @@ namespace AtlasBotNode.Modules
                 response = _smashggEmbedGenerator.CreateTournamentScheduleEmbed(tournaments).Build();
             await ReplyAsync("", embed: response);
         }
+
+        [Command("Sets")]
+        public async Task GetSets([Remainder] string names)
+        {
+            var embed = _smashggEmbedGenerator.CreateMatchEmbedGenerator().Build();
+            await ReplyAsync("", embed: embed);
+        }
     }
 }

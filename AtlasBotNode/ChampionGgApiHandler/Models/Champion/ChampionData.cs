@@ -44,5 +44,9 @@ namespace ChampionGgApiHandler.Models.Champion
 
         [JsonProperty("positions")]
         public RankingData Rankings { get; set; }
+
+        [JsonProperty("hashes")]
+        public Hashes Hashes { get; set; }
+
     }
 }

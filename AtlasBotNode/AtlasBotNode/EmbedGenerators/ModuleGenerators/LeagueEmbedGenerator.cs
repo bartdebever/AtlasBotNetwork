@@ -11,6 +11,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         ILeagueEmbedGenerator CreatePerformanceEmbed(Performance performance);
 
         ILeagueEmbedGenerator CreateChampionDataEmbed(ChampionData championData);
+        ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, string championName);
     }
 
     public class LeagueEmbedGenerator : ILeagueEmbedGenerator
@@ -88,6 +89,52 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             _embedBuilder.AddField("Damage", stringBuilder.ToString());
 
             return this;
+        }
+
+        public ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, string championName)
+        {
+            ResetBuilder();
+
+            _embedBuilder.WithTitle($"{championName} for patch {championData.Patch}");
+
+            CreateFieldForHash(championData.Hashes.FirstItems, "First Items", true);
+            CreateFieldForHash(championData.Hashes.Items, "Final Build", true);
+            CreateFieldForHash(championData.Hashes.Skills, "Skill Order");
+            CreateFieldForHash(championData.Hashes.Runes, "Runes", true);
+            CreateFieldForHash(championData.Hashes.Summoners, "Summoners", true);
+
+            return this;
+        }
+
+        private void CreateFieldForHash(HashCategory hash, string title, bool useEmoji = false)
+        {
+            if (hash == null)
+                return;
+            var used = hash.MostUsed;
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Wins: {used.Wins}");
+            stringBuilder.AppendLine($"Total Used: {used.Count}");
+            var hashStringBuilder = new StringBuilder();
+            var ids = used.Hash.Split('-');
+            if (useEmoji)
+            {
+
+                foreach (var id in ids)
+                {
+                    hashStringBuilder.Append($"{EmojiGetterHelper.GetEmoji(id)} ");
+                }
+            }
+            else
+            {
+                foreach (var id in ids)
+                {
+                    hashStringBuilder.Append($"{id} ");
+                }
+            }
+
+            stringBuilder.AppendLine(hashStringBuilder.ToString());
+            _embedBuilder.AddField(title, stringBuilder.ToString());
+
         }
     }
 }

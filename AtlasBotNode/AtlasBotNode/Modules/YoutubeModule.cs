@@ -41,7 +41,6 @@
                 await ReplyAsync("Couldn't find that channel, sorry!");
                 return;
             }
-
             await ReplyAsync(string.Empty, embed: this._youtubeEmbedGenerator.CreateChannelEmbed(channel).Build());
         }
     }

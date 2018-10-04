@@ -13,6 +13,8 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         ISmashggEmbedGenerator CreateTournamentEmbed(TournamentRoot tournament);
 
         ISmashggEmbedGenerator CreateTournamentScheduleEmbed(TournamentScheduleRoot tournaments);
+
+        ISmashggEmbedGenerator CreateMatchEmbedGenerator();
     }
 
     public class SmashggEmbedGenerator : ISmashggEmbedGenerator
@@ -32,6 +34,8 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         private void ResetBuilder()
         {
             _builder = new EmbedBuilder();
+            _builder.WithColor(Color.Blue);
+            _builder.WithFooter("Data provided by smash.gg");
         }
 
         public ISmashggEmbedGenerator CreateTournamentEmbed(TournamentRoot tournament)
@@ -92,6 +96,26 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 }
                 _builder.AddInlineField(tournament.Name, $"At {tournament.StartDate.ToLongDateString()}\n**Games:** \n{stringBuilder}");
             }
+            return this;
+        }
+
+        public ISmashggEmbedGenerator CreateMatchEmbedGenerator()
+        {
+            ResetBuilder();
+            _builder.WithTitle("Player1");
+            _builder.AddField("Tournament", $"These games were played for tournament TournamentName\n" +
+                                            $"Use `-smashgg tournament TournamentName` to view more info.");
+            for (int i = 0; i < 3; i++)
+            {
+                var stringBuilder = new StringBuilder();
+                var random = new Random(i);
+                for (var y = 0; y < random.Next(2, 5); y++)
+                {
+                    stringBuilder.AppendLine($"**vs Player{y}:** {random.Next(0, 3)} - {random.Next(0, 3)}");
+                }
+                _builder.AddField($"Game{i}", stringBuilder.ToString());
+            }
+
             return this;
         }
     }

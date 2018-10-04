@@ -25,7 +25,7 @@ namespace ChampionGgApiHandler.Modules
         public async Task<ChampionData> GetChampionData(int championId)
         {
             var client = new RestClient(_baseUri);
-            var request = new RestRequest($"champions/{championId}?limit=1&champData=kda,damage,positions&api_key={KeyStorage.ApiKey}");
+            var request = new RestRequest($"champions/{championId}?limit=1&champData=kda,damage,positions,finalitems,hashes&api_key={KeyStorage.ApiKey}");
             var response = await client.ExecuteTaskAsync(request);
 
             if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))

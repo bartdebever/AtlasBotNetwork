@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.Commands;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,11 @@ namespace AtlasBotNode.Modules
         [Command("")]
         public async Task GetRoles([Remainder] string roleText)
         {
-            var roleNames = roleText.Split(" ");
-            var roleList = roleNames.Select(roleName => Context.Guild.Roles.FirstOrDefault(x => x.Name.Equals(roleName))).Where(role => role != null).ToList();
-            if (!roleList.Any())
+            if (Context.Guild.Id != 227778876540059651)
                 return;
+
+            var roleNames = roleText.Split(" ");
+            var roleList = roleNames.Select(roleName => Context.Guild.Roles.FirstOrDefault(x => x.Name.Equals(roleName, StringComparison.InvariantCultureIgnoreCase))).Where(role => role != null).ToList();
             if (Context.User is IGuildUser guildUser)
             {
                 await guildUser.AddRolesAsync(roleList);

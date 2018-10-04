@@ -4,6 +4,7 @@ using Discord;
 using Discord.Commands;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using AtlasBotNode.Helpers;
 
 namespace AtlasBotNode.Modules
 {
@@ -37,8 +38,19 @@ namespace AtlasBotNode.Modules
         {
             var championData = await _championGgClient.Champions.GetChampionData(championId);
             if (championData == null)
-                await ReplyAsync("Unable to get champion");
+                await ReplyAsync("Unable to get that champion");
             var response = _leagueEmbedGenerator.CreateChampionDataEmbed(championData).Build();
+            await ReplyAsync("", embed: response);
+        }
+
+        [Command("build")]
+        public async Task GetChampionBuild([Remainder] string champion)
+        {
+            var idAndName = LoLChampionHelper.GetNameAndIdForName(champion);
+            var championData = await _championGgClient.Champions.GetChampionData(idAndName.Item1);
+            if(championData == null)
+                await ReplyAsync("Unable to get that champion");
+            var response = _leagueEmbedGenerator.CreateChampionBuildEmbed(championData, idAndName.Item2).Build();
             await ReplyAsync("", embed: response);
         }
     }
