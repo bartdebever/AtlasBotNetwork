@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using AtlasBotNode.Communication;
+using AtlasBotNode.Configuration;
 using AtlasBotNode.Modules;
 using ChampionGgApiHandler;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,10 @@ namespace AtlasBotNode
             new Program().Start().GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Start the Discord Bot process.
+        /// </summary>
+        /// <returns>An awaitable task.</returns>
         private async Task Start()
         {
 
@@ -58,10 +63,11 @@ namespace AtlasBotNode
                 _client.Log += DefaultLogger.Logger;
                 _commands.Log += DefaultLogger.Logger;
             }
+
+            _services = DependencyInjection.GetServiceCollection().BuildServiceProvider();
             
-            await InjectDependencies();
-
-
+            await InstallCommands();
+            
             await _client.LoginAsync(TokenType.Bot, section.GetSection("discord").Value);
             await _client.StartAsync();
 
@@ -136,23 +142,6 @@ namespace AtlasBotNode
                         break;
                 }
             }
-        }
-        private async Task InjectDependencies()
-        {
-            var serviceCollection = new ServiceCollection();
-
-            serviceCollection.AddTransient<IDefaultEmbedGenerator, DefaultEmbedGenerator>();
-            serviceCollection.AddTransient<IHelpEmbedGenerator, HelpEmbedGenerator>();
-            serviceCollection.AddTransient<IInputSanitizer, InputSanitizer>();
-            serviceCollection.AddTransient<ISmashggEmbedGenerator, SmashggEmbedGenerator>();
-            serviceCollection.AddTransient<ISpeedrunEmbedGenerator, SpeedrunEmbedGenerator>();
-            serviceCollection.AddTransient<ISmash4EmbedGenerator, Smash4EmbedGenerator>();
-            serviceCollection.AddTransient<ILeagueEmbedGenerator, LeagueEmbedGenerator>();
-            serviceCollection.AddTransient<IYoutubeEmbedGenerator, YoutubeEmbedGenerator>();
-
-            _services = serviceCollection.BuildServiceProvider();
-
-            await InstallCommands();
         }
     }
 }
