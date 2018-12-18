@@ -80,12 +80,5 @@ namespace AtlasBotNode.Modules
             var response = _leagueEmbedGenerator.CreateChampionBuildEmbed(championData, championDto).Build();
             await ReplyAsync("", embed: response);
         }
-
-        [Command("Queue")]
-        public async Task Queue(string username, string queue)
-        {
-            var webhook = new LfgWebhook();
-            await webhook.SendTestMessage(username, queue, "EUW");
-        }
     }
 }
