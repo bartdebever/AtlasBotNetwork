@@ -5,7 +5,6 @@ using Discord.Commands;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AtlasBotNode.Helpers;
-using AtlasBotNode.Webhook;
 
 namespace AtlasBotNode.Modules
 {
