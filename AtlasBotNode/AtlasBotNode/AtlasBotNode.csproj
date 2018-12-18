@@ -22,11 +22,6 @@
     <ProjectReference Include="..\YoutubeApiHandler\YoutubeApiHandler.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Preconditions\" />
-    <Folder Include="Readers\" />
-  </ItemGroup>
-
   <Target Name="CopyToOut" BeforeTargets="BeforeBuild">
     <Copy SourceFiles="appsettings.json" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
