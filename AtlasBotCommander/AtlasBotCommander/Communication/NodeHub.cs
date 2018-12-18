@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
-using AtlasBotCommander.Loggers;
+using AtlasBotCommander.AtlasBotNode;
 using AtlasModels.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace AtlasBotCommander.Communication
 {
@@ -17,11 +17,13 @@ namespace AtlasBotCommander.Communication
         private readonly List<AtlasNode> _nodes;
         private readonly string _ip = "127.0.0.1";
         private readonly int _port = 6677;
+        private readonly ILogger<NodeHub> _logger;
         private Socket _listener;
         private string _token => "AtlasTestToken";
 
-        public NodeHub()
+        public NodeHub(ILogger<NodeHub> logger)
         {
+            _logger = logger;
             _nodes = new List<AtlasNode>();
         }
 
@@ -32,7 +34,7 @@ namespace AtlasBotCommander.Communication
             _listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _listener.Bind(localEndPoint);
             _listener.Listen(100);
-            Console.WriteLine($"Listening for nodes on {localEndPoint.Address} {_port}");
+            _logger.LogInformation($"Listening for nodes on {localEndPoint.Address} {_port}");
             while (true)
             {
                 var socket = _listener.Accept();
@@ -54,7 +56,9 @@ namespace AtlasBotCommander.Communication
                 }
                 catch (SocketException)
                 {
-                    DefaultLogger.Logger(new LogMessage(node.Name, null, "Disconnected", 1, 0));
+                    var message = $"{node.Name} disconnected";
+                    _logger.LogWarning(message);
+                    Program.LogMessage($"**{message}**").GetAwaiter().GetResult();
                     _nodes.Remove(node);
                     
                     return;
@@ -72,21 +76,28 @@ namespace AtlasBotCommander.Communication
 
         private void HandleMessage(LogMessage message, ref AtlasNode node)
         {
+            string textMessage;
             switch (message.MessageType)
             {
                 case 0:
                     if (message.Message != _token)
                     {
+                        textMessage =
+                            $"{message.Node} tried to register with an invalid token, IP: {(node.Socket.RemoteEndPoint as IPEndPoint)?.Address}";
                         _nodes.Remove(node);
-                        DefaultLogger.Logger(new LogMessage(message.Node, message.Module, $"Invalid token detected for ip {(node.Socket.RemoteEndPoint as IPEndPoint)?.Address}", 1, 0));
+                        _logger.LogCritical(textMessage);
+                        Program.LogMessage(textMessage).GetAwaiter().GetResult();
                         node.Socket.Disconnect(true);
                         return;
                     }
-                    DefaultLogger.Logger(new LogMessage(message.Node, message.Module, message.Message, 3, 0));
+                    textMessage = $"[{message.Node}] [{message.Module}]: {message.Message}";
+                    _logger.LogInformation(textMessage);
                     node.Name = message.Node;
                     break;
                 case 1:
-                    DefaultLogger.Logger(message);
+                    textMessage = $"[{message.Node}] [{message.Module}]: {message.Message}";
+                    _logger.LogInformation(textMessage);
+                    Program.LogMessage(textMessage).GetAwaiter().GetResult();
                     break;
             }
         }
