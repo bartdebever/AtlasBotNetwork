@@ -16,9 +16,15 @@
     <ProjectReference Include="..\AtlasModels\AtlasModels.csproj" />
     <ProjectReference Include="..\ChampionGgApiHandler\ChampionGgApiHandler.csproj" />
     <ProjectReference Include="..\KhApiHandler\KhApiHandler.csproj" />
+    <ProjectReference Include="..\LoLHandler\LoLHandler.csproj" />
     <ProjectReference Include="..\SmashggHandler\SmashggHandler.csproj" />
     <ProjectReference Include="..\SpeedrunAPIHandler\SpeedrunAPIHandler.csproj" />
     <ProjectReference Include="..\YoutubeApiHandler\YoutubeApiHandler.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Preconditions\" />
+    <Folder Include="Readers\" />
   </ItemGroup>
 
   <Target Name="CopyToOut" BeforeTargets="BeforeBuild">

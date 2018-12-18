@@ -10,7 +10,7 @@ namespace ChampionGgApiHandler.Modules
 {
     public interface IChampionModule
     {
-        Task<ChampionData> GetChampionData(int championId);
+        Task<ChampionData> GetChampionStats(int championId);
     }
 
     public class ChampionModule : IChampionModule
@@ -22,7 +22,7 @@ namespace ChampionGgApiHandler.Modules
             _baseUri = uri;
         }
 
-        public async Task<ChampionData> GetChampionData(int championId)
+        public async Task<ChampionData> GetChampionStats(int championId)
         {
             var client = new RestClient(_baseUri);
             var request = new RestRequest($"champions/{championId}?limit=1&champData=kda,damage,positions,finalitems,hashes&api_key={KeyStorage.ApiKey}");

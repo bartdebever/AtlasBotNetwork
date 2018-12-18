@@ -1,17 +1,20 @@
-﻿using AtlasBotNode.Helpers;
+﻿using System.Globalization;
+using AtlasBotNode.Helpers;
 using ChampionGgApiHandler.Models.Champion;
 using ChampionGgApiHandler.Models.Performance;
 using Discord;
 using System.Text;
+using RestSharp.Extensions;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
     public interface ILeagueEmbedGenerator : IEmbedGenerator
     {
         ILeagueEmbedGenerator CreatePerformanceEmbed(Performance performance);
-
+        ILeagueEmbedGenerator CreateChampionSpellsEmbed(LoLHandler.Dtos.ChampionDto champion, ChampionDto championDto);
+        ILeagueEmbedGenerator CreateChampionEmbed(LoLHandler.Dtos.ChampionDto champion, string internalName);
         ILeagueEmbedGenerator CreateChampionDataEmbed(ChampionData championData);
-        ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, string championName);
+        ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, ChampionDto championDto);
     }
 
     public class LeagueEmbedGenerator : ILeagueEmbedGenerator
@@ -56,6 +59,50 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             return this;
         }
 
+        public ILeagueEmbedGenerator CreateChampionSpellsEmbed(LoLHandler.Dtos.ChampionDto champion, ChampionDto championDto)
+        {
+            ResetBuilder();
+
+            _embedBuilder.WithThumbnailUrl(
+                $"http://ddragon.leagueoflegends.com/cdn/8.19.1/img/champion/{championDto.InternalName}.png");
+
+//            Didn't enjoy the look of this at all
+//            var infoStringBuilder = new StringBuilder();
+//            foreach (var info in champion.Info)
+//            {
+//                infoStringBuilder.AppendLine($"{info.Key.ToPascalCase(CultureInfo.CurrentCulture)}: {info.Value}");
+//            }
+//            _embedBuilder.AddField("Statistics", infoStringBuilder.ToString());
+
+            var spellStringBuilder = new StringBuilder();
+            _embedBuilder.AddField("Passive", $"**{champion.Passive.Name}**\n{champion.Passive.Description.Replace("<br>", "\n")}");
+            var keys = new string[]{"Q", "W", "E", "R"};
+            for (var i = 0; i < 4; i++)
+            {
+                var spell = champion.Spells[i];
+                spellStringBuilder.Clear();
+                spellStringBuilder.AppendLine($"**{spell.Name}**");
+                spellStringBuilder.AppendLine($"{spell.Description}");
+                if (!string.IsNullOrWhiteSpace(spell.CooldownBurn) || spell.CooldownBurn.Equals("0"))
+                    spellStringBuilder.AppendLine($"**Cooldown:** {spell.CooldownBurn}");
+                _embedBuilder.AddField(keys[i], spellStringBuilder.ToString());
+            }
+
+
+
+            return this;
+        }
+
+        public ILeagueEmbedGenerator CreateChampionEmbed(LoLHandler.Dtos.ChampionDto champion, string internalName)
+        {
+            ResetBuilder();
+            _embedBuilder.WithImageUrl($"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{internalName}_0.jpg");
+            _embedBuilder.AddField(champion.Name, champion.Title);
+            _embedBuilder.AddField("Commands", $"User \"-lol spells {champion.Name}\" to get details on what spells {champion.Name} has.");
+
+            return this;
+        }
+
         public ILeagueEmbedGenerator CreateChampionDataEmbed(ChampionData championData)
         {
             ResetBuilder();
@@ -91,11 +138,11 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             return this;
         }
 
-        public ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, string championName)
+        public ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, ChampionDto championDto)
         {
             ResetBuilder();
 
-            _embedBuilder.WithTitle($"{championName} for patch {championData.Patch}");
+            _embedBuilder.WithTitle($"{championDto.Name} for patch {championData.Patch}");
 
             CreateFieldForHash(championData.Hashes.FirstItems, "First Items", true);
             CreateFieldForHash(championData.Hashes.Items, "Final Build", true);
@@ -103,6 +150,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             CreateFieldForHash(championData.Hashes.Runes, "Runes", true);
             CreateFieldForHash(championData.Hashes.Summoners, "Summoners", true);
 
+            _embedBuilder.WithThumbnailUrl($"http://ddragon.leagueoflegends.com/cdn/8.19.1/img/champion/{championDto.InternalName}.png");
             return this;
         }
 

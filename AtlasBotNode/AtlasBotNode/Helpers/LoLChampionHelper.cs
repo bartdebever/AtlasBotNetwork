@@ -12,6 +12,12 @@ namespace AtlasBotNode.Helpers
     {
         private static Dictionary<string, ChampionDto> _championData = new Dictionary<string, ChampionDto>();
         private static bool _initialized;
+
+        public static ChampionDto GetChampionByName(string name)
+        {
+            ConvertToChampionName(ref name);
+            return _championData[name];
+        }
         public static int GetIdFromName(string name)
         {
             ConvertToChampionName(ref name);
