@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AtlasBotNode.Communication;
 using AtlasBotNode.Configuration;
+using AtlasBotNode.Configuration.Models;
 using AtlasBotNode.Modules;
 using ChampionGgApiHandler;
 using Microsoft.Extensions.Configuration;
@@ -26,9 +27,10 @@ namespace AtlasBotNode
         private DiscordSocketClient _client;
         private IServiceProvider _services;
         private static IConfiguration _config;
-
+        private static BaseConfiguration _configuration;
         private static void Main(string[] args)
         {
+            _configuration = new ConfigurationLoader().CreateConfiguration("appsettings.json");
             _config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false).Build();
             new Program().Start().GetAwaiter().GetResult();

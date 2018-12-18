@@ -4,6 +4,6 @@ namespace AtlasBotNode.Configuration
 {
     public interface IConfigurationLoader<T>
     {
-        BaseConfiguration CreateConfiguration<T>(T input);
+        BaseConfiguration CreateConfiguration(T input);
     }
 }
