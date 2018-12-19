@@ -26,13 +26,10 @@ namespace AtlasBotNode
         private CommandService _commands;
         private DiscordSocketClient _client;
         private IServiceProvider _services;
-        private static IConfiguration _config;
         private static BaseConfiguration _configuration;
         private static void Main(string[] args)
         {
             _configuration = new ConfigurationLoader().CreateConfiguration("appsettings.json");
-            _config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false).Build();
             new Program().Start().GetAwaiter().GetResult();
         }
 
@@ -43,22 +40,16 @@ namespace AtlasBotNode
         private async Task Start()
         {
 
-            var section = _config.GetSection("keys");
             _client = new DiscordSocketClient();
             _commands = new CommandService();
-            SetApiKeys(section);
+            
+            SetApiKeys(_configuration.KeyConfiguration);
+            
             DiscordCommandHelper.CommandService = _commands;
             DiscordCommandHelper.Client = _client;
-            var commanderSection = _config.GetSection("commander");
-            if (Convert.ToBoolean(commanderSection.GetSection("use-commander").Value))
+            if (_configuration.CommanderConfiguration.UseCommander)
             {
-                var commanderConnector = new CommanderConnector(commanderSection.GetSection("commander-ip").Value,
-                    Convert.ToInt32(commanderSection.GetSection("commander-port").Value), commanderSection.GetSection("node-name").Value,
-                    commanderSection.GetSection("commander-token").Value);
-                commanderConnector.Connect();
-                commanderConnector.Register();
-                _client.Log += commanderConnector.LogDiscord;
-                _commands.Log += commanderConnector.LogDiscord;
+
             }
             else
             {
@@ -70,7 +61,7 @@ namespace AtlasBotNode
             
             await InstallCommands();
             
-            await _client.LoginAsync(TokenType.Bot, section.GetSection("discord").Value);
+            await _client.LoginAsync(TokenType.Bot, _configuration.KeyConfiguration.Discord);
             await _client.StartAsync();
 
             await Task.Delay(-1);
@@ -81,7 +72,7 @@ namespace AtlasBotNode
             // Hook the MessageReceived Event into our Command Handler
             _client.MessageReceived += HandleCommand;
             //Add all modules specified in the config file.
-            await AddModules(_config.GetSection("modules"));
+            await AddModules();
         }
 
         private async Task HandleCommand(SocketMessage messageParam)
@@ -102,18 +93,31 @@ namespace AtlasBotNode
             await _commands.ExecuteAsync(context, argPos, _services);
         }
 
-        private static void SetApiKeys(IConfiguration config)
+        private static void SetApiKeys(KeyConfiguration config)
         {
-            KeyStorage.ApiKey = config.GetSection("champion.gg").Value;
-            SpeedrunAPIClient.ApiKey = config.GetSection("speedrun").Value;
-            YoutubeRequester.ApiKey = config.GetSection("youtube").Value;
+            KeyStorage.ApiKey = config.Championgg;
+            SpeedrunAPIClient.ApiKey = config.Speedrun;
+            YoutubeRequester.ApiKey = config.YouTube;
         }
 
-        private async Task AddModules(IConfiguration config)
+        private void SetupCommander()
         {
-            foreach (var child in config.GetChildren())
+            var commanderSection = _configuration.CommanderConfiguration;
+            var commanderConnector = new CommanderConnector(commanderSection.IpAddress,
+                commanderSection.Port, commanderSection.NodeName,
+                commanderSection.CommanderToken);
+            commanderConnector.Connect();
+            commanderConnector.Register();
+            _client.Log += commanderConnector.LogDiscord;
+            _commands.Log += commanderConnector.LogDiscord;
+        }
+        
+        private async Task AddModules()
+        {
+            // TODO you are next to die, switch statement
+            foreach (var child in _configuration.Modules)
             {
-                switch (child.Value)
+                switch (child)
                 {
                     case "All":
                         await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
