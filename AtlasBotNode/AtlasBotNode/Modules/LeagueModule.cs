@@ -5,12 +5,13 @@ using Discord.Commands;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AtlasBotNode.Helpers;
+using AtlasBotNode.Modules.Base;
 
 namespace AtlasBotNode.Modules
 {
     [Group("lol")]
     [Alias("league")]
-    public class LeagueModule : ModuleBase
+    public class LeagueModule : AtlasModule
     {
         private readonly ChampionGgClient _championGgClient;
         private readonly LoLClient _lolClient;
@@ -22,6 +23,8 @@ namespace AtlasBotNode.Modules
             _leagueEmbedGenerator = leagueEmbedGenerator;
             _lolClient = new LoLClient();
         }
+        
+        public override string Identifier => "League";
 
         [Command("performance")]
         [Alias("op", "ops")]

@@ -47,6 +47,7 @@ namespace AtlasBotNode
             
             DiscordCommandHelper.CommandService = _commands;
             DiscordCommandHelper.Client = _client;
+            
             if (_configuration.CommanderConfiguration.UseCommander)
             {
 

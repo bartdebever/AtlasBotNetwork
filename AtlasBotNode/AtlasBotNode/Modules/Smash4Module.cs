@@ -3,12 +3,13 @@ using Discord.Commands;
 using KhApiHandler;
 using SmashggHandler.Models;
 using System.Threading.Tasks;
+using AtlasBotNode.Modules.Base;
 
 namespace AtlasBotNode.Modules
 {
     [Group("smash4")]
     [Alias("SB4", "S4")]
-    public class Smash4Module : ModuleBase
+    public class Smash4Module : AtlasModule
     {
         private readonly KhClient _apiClient;
         private readonly ISmash4EmbedGenerator _smash4EmbedGenerator;
@@ -19,6 +20,8 @@ namespace AtlasBotNode.Modules
             _apiClient = new KhClient();
         }
 
+        public override string Identifier => "Smash4";
+        
         [Command("character")]
         [Alias("c")]
         public async Task GetCharacterByName([Remainder] string characterName)

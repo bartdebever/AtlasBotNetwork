@@ -4,13 +4,16 @@ using Discord.Commands;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AtlasBotNode.Modules.Base;
 
 namespace AtlasBotNode.Modules
 {
     [Group("Role")]
     [Alias("region", "rank")]
-    public class RoleModule : ModuleBase
+    public class RoleModule : AtlasModule
     {
+        public override string Identifier => "Role";
+        
         [Command("")]
         public async Task GetRoles([Remainder] string roleText)
         {
