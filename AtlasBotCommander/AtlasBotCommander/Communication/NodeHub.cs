@@ -60,10 +60,10 @@ namespace AtlasBotCommander.Communication
                     _logger.LogWarning(message);
                     Program.LogMessage($"**{message}**").GetAwaiter().GetResult();
                     _nodes.Remove(node);
-                    
+
                     return;
                 }
-                
+
                 using (var memoryStream = new MemoryStream(data))
                 {
                     var formatter = new BinaryFormatter();
