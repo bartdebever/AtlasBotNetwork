@@ -8,11 +8,12 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AtlasBotNode.Communication;
 using AtlasBotNode.Configuration;
-using AtlasBotNode.Modules;
+using AtlasBotNode.Configuration.Models;
 using ChampionGgApiHandler;
 using Microsoft.Extensions.Configuration;
 using SpeedrunAPIHandler;
@@ -25,12 +26,11 @@ namespace AtlasBotNode
         private CommandService _commands;
         private DiscordSocketClient _client;
         private IServiceProvider _services;
-        private static IConfiguration _config;
+        private static BaseConfiguration _configuration;
 
         private static void Main(string[] args)
         {
-            _config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false).Build();
+            _configuration = new ConfigurationLoader().CreateConfiguration("appsettings.json");
             new Program().Start().GetAwaiter().GetResult();
         }
 
@@ -40,23 +40,17 @@ namespace AtlasBotNode
         /// <returns>An awaitable task.</returns>
         private async Task Start()
         {
-
-            var section = _config.GetSection("keys");
             _client = new DiscordSocketClient();
             _commands = new CommandService();
-            SetApiKeys(section);
+
+            SetApiKeys(_configuration.KeyConfiguration);
+
             DiscordCommandHelper.CommandService = _commands;
             DiscordCommandHelper.Client = _client;
-            var commanderSection = _config.GetSection("commander");
-            if (Convert.ToBoolean(commanderSection.GetSection("use-commander").Value))
+
+            if (_configuration.CommanderConfiguration.UseCommander)
             {
-                var commanderConnector = new CommanderConnector(commanderSection.GetSection("commander-ip").Value,
-                    Convert.ToInt32(commanderSection.GetSection("commander-port").Value), commanderSection.GetSection("node-name").Value,
-                    commanderSection.GetSection("commander-token").Value);
-                commanderConnector.Connect();
-                commanderConnector.Register();
-                _client.Log += commanderConnector.LogDiscord;
-                _commands.Log += commanderConnector.LogDiscord;
+                SetupCommander();
             }
             else
             {
@@ -65,10 +59,10 @@ namespace AtlasBotNode
             }
 
             _services = DependencyInjection.GetServiceCollection().BuildServiceProvider();
-            
+
             await InstallCommands();
-            
-            await _client.LoginAsync(TokenType.Bot, section.GetSection("discord").Value);
+
+            await _client.LoginAsync(TokenType.Bot, _configuration.KeyConfiguration.Discord);
             await _client.StartAsync();
 
             await Task.Delay(-1);
@@ -79,7 +73,7 @@ namespace AtlasBotNode
             // Hook the MessageReceived Event into our Command Handler
             _client.MessageReceived += HandleCommand;
             //Add all modules specified in the config file.
-            await AddModules(_config.GetSection("modules"));
+            await AddModules();
         }
 
         private async Task HandleCommand(SocketMessage messageParam)
@@ -100,47 +94,32 @@ namespace AtlasBotNode
             await _commands.ExecuteAsync(context, argPos, _services);
         }
 
-        private static void SetApiKeys(IConfiguration config)
+        private static void SetApiKeys(KeyConfiguration config)
         {
-            KeyStorage.ApiKey = config.GetSection("champion.gg").Value;
-            SpeedrunAPIClient.ApiKey = config.GetSection("speedrun").Value;
-            YoutubeRequester.ApiKey = config.GetSection("youtube").Value;
+            KeyStorage.ApiKey = config.Championgg;
+            SpeedrunAPIClient.ApiKey = config.Speedrun;
+            YoutubeRequester.ApiKey = config.YouTube;
         }
 
-        private async Task AddModules(IConfiguration config)
+        private void SetupCommander()
         {
-            foreach (var child in config.GetChildren())
+            var commanderSection = _configuration.CommanderConfiguration;
+            var commanderConnector = new CommanderConnector(commanderSection.IpAddress,
+                commanderSection.Port, commanderSection.NodeName,
+                commanderSection.CommanderToken);
+            commanderConnector.Connect();
+            commanderConnector.Register();
+            _client.Log += commanderConnector.LogDiscord;
+            _commands.Log += commanderConnector.LogDiscord;
+        }
+
+        private async Task AddModules()
+        {
+            var moduleLoader = new ModuleLoader();
+            var modules = moduleLoader.GetModules(_configuration.Modules);
+            foreach (var module in modules)
             {
-                switch (child.Value)
-                {
-                    case "All":
-                        await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
-                        return;
-                    case "Smash4":
-                        await _commands.AddModuleAsync<Smash4Module>();
-                        break;
-                    case "Speedrun":
-                        await _commands.AddModuleAsync<SpeedrunModule>();
-                        break;
-                    case "Help":
-                        await _commands.AddModuleAsync<HelpModule>();
-                        break;
-                    case "Role":
-                        await _commands.AddModuleAsync<RoleModule>();
-                        break;
-                    case "Smashgg":
-                        await _commands.AddModuleAsync<SmashggModule>();
-                        break;
-                    case "Youtube":
-                        await _commands.AddModuleAsync<YoutubeModule>();
-                        break;
-                    case "Quiz":
-                        await _commands.AddModuleAsync<QuizModule>();
-                        break;
-                    case "Test":
-                        await _commands.AddModuleAsync<TestModule>();
-                        break;
-                }
+                await _commands.AddModuleAsync(module);
             }
         }
     }
