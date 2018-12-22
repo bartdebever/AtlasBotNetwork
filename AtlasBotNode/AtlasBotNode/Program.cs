@@ -14,8 +14,6 @@ using System.Threading.Tasks;
 using AtlasBotNode.Communication;
 using AtlasBotNode.Configuration;
 using AtlasBotNode.Configuration.Models;
-using AtlasBotNode.Modules;
-using AtlasBotNode.Modules.Base;
 using ChampionGgApiHandler;
 using Microsoft.Extensions.Configuration;
 using SpeedrunAPIHandler;
