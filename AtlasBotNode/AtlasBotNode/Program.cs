@@ -8,12 +8,14 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AtlasBotNode.Communication;
 using AtlasBotNode.Configuration;
 using AtlasBotNode.Configuration.Models;
 using AtlasBotNode.Modules;
+using AtlasBotNode.Modules.Base;
 using ChampionGgApiHandler;
 using Microsoft.Extensions.Configuration;
 using SpeedrunAPIHandler;
@@ -27,6 +29,7 @@ namespace AtlasBotNode
         private DiscordSocketClient _client;
         private IServiceProvider _services;
         private static BaseConfiguration _configuration;
+
         private static void Main(string[] args)
         {
             _configuration = new ConfigurationLoader().CreateConfiguration("appsettings.json");
@@ -39,18 +42,17 @@ namespace AtlasBotNode
         /// <returns>An awaitable task.</returns>
         private async Task Start()
         {
-
             _client = new DiscordSocketClient();
             _commands = new CommandService();
-            
+
             SetApiKeys(_configuration.KeyConfiguration);
-            
+
             DiscordCommandHelper.CommandService = _commands;
             DiscordCommandHelper.Client = _client;
-            
+
             if (_configuration.CommanderConfiguration.UseCommander)
             {
-
+                SetupCommander();
             }
             else
             {
@@ -59,9 +61,9 @@ namespace AtlasBotNode
             }
 
             _services = DependencyInjection.GetServiceCollection().BuildServiceProvider();
-            
+
             await InstallCommands();
-            
+
             await _client.LoginAsync(TokenType.Bot, _configuration.KeyConfiguration.Discord);
             await _client.StartAsync();
 
@@ -112,42 +114,14 @@ namespace AtlasBotNode
             _client.Log += commanderConnector.LogDiscord;
             _commands.Log += commanderConnector.LogDiscord;
         }
-        
+
         private async Task AddModules()
         {
-            // TODO you are next to die, switch statement
-            foreach (var child in _configuration.Modules)
+            var moduleLoader = new ModuleLoader();
+            var modules = moduleLoader.GetModules(_configuration.Modules);
+            foreach (var module in modules)
             {
-                switch (child)
-                {
-                    case "All":
-                        await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
-                        return;
-                    case "Smash4":
-                        await _commands.AddModuleAsync<Smash4Module>();
-                        break;
-                    case "Speedrun":
-                        await _commands.AddModuleAsync<SpeedrunModule>();
-                        break;
-                    case "Help":
-                        await _commands.AddModuleAsync<HelpModule>();
-                        break;
-                    case "Role":
-                        await _commands.AddModuleAsync<RoleModule>();
-                        break;
-                    case "Smashgg":
-                        await _commands.AddModuleAsync<SmashggModule>();
-                        break;
-                    case "Youtube":
-                        await _commands.AddModuleAsync<YoutubeModule>();
-                        break;
-                    case "Quiz":
-                        await _commands.AddModuleAsync<QuizModule>();
-                        break;
-                    case "Test":
-                        await _commands.AddModuleAsync<TestModule>();
-                        break;
-                }
+                await _commands.AddModuleAsync(module);
             }
         }
     }
