@@ -6,12 +6,11 @@ using Discord.Commands;
 using SmashggHandler;
 using System.Linq;
 using System.Threading.Tasks;
-using AtlasBotNode.Modules.Base;
 
 namespace AtlasBotNode.Modules
 {
     [Group("Smashgg")]
-    public class SmashggModule : AtlasModule
+    public class SmashggModule : ModuleBase
     {
         private readonly SmashggClient _smashggClient;
         private readonly IInputSanitizer _inputSanitizer;
@@ -25,8 +24,6 @@ namespace AtlasBotNode.Modules
             _defaultEmbedGenerator = defaultEmbedGenerator;
             _smashggEmbedGenerator = smashggEmbedGenerator;
         }
-        
-        public override string Identifier => "Smashgg";
 
         [Command("Tournament")]
         [Summary("Get the info from a tournament by name")]

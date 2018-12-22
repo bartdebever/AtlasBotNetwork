@@ -3,15 +3,12 @@ using Discord.Commands;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using AtlasBotNode.Modules.Base;
 
 namespace AtlasBotNode.Modules
 {
     [Group("Quiz")]
-    public class QuizModule : AtlasModule
+    public class QuizModule : ModuleBase
     {
-        public override string Identifier => "Quiz";
-        
         [Command("Question")]
         public async Task CreateQuestion(decimal time, string question, [Optional, Remainder] string answers)
         {

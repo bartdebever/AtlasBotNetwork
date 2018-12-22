@@ -4,12 +4,11 @@ using Discord;
 using Discord.Commands;
 using System;
 using System.Threading.Tasks;
-using AtlasBotNode.Modules.Base;
 
 namespace AtlasBotNode.Modules
 {
     [Group("test")]
-    public class TestModule : AtlasModule
+    public class TestModule : ModuleBase
     {
         private readonly IDefaultEmbedGenerator _defaultEmbedGenerator;
 
@@ -17,8 +16,6 @@ namespace AtlasBotNode.Modules
         {
             _defaultEmbedGenerator = defaultEmbedGenerator;
         }
-        
-        public override string Identifier => "Test";
 
         [Command("Test")]
         public async Task Test()

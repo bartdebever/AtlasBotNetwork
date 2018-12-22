@@ -1,6 +1,4 @@
-﻿using AtlasBotNode.Modules.Base;
-
-namespace AtlasBotNode.Modules
+﻿namespace AtlasBotNode.Modules
 {
     using AtlasBotNode.EmbedGenerators.ModuleGenerators;
     using Discord.Commands;
@@ -11,7 +9,7 @@ namespace AtlasBotNode.Modules
     /// Module made to get data from the YouTube API.
     /// </summary>
     [Group("Youtube")]
-    public class YoutubeModule : AtlasModule
+    public class YoutubeModule : ModuleBase
     {
         private readonly YoutubeRequester _youtubeRequester;
 
@@ -29,8 +27,6 @@ namespace AtlasBotNode.Modules
             this._youtubeEmbedGenerator = youtubeEmbedGenerator;
         }
 
-        public override string Identifier => "Youtube";
-        
         /// <summary>
         /// Gets the channel by name provided by the user
         /// </summary>

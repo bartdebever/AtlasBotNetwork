@@ -4,13 +4,12 @@ using Discord;
 using Discord.Commands;
 using SpeedrunAPIHandler;
 using System.Threading.Tasks;
-using AtlasBotNode.Modules.Base;
 
 namespace AtlasBotNode.Modules
 {
     [Group("Speedrun")]
     [Alias("SR")]
-    public class SpeedrunModule : AtlasModule
+    public class SpeedrunModule : ModuleBase
     {
         private readonly SpeedrunAPIClient _speedrunApiClient;
         private readonly ISpeedrunEmbedGenerator _speedrunEmbedGenerator;
@@ -22,8 +21,6 @@ namespace AtlasBotNode.Modules
             _speedrunEmbedGenerator = speedrunEmbedGenerator;
             _speedrunApiClient = new SpeedrunAPIClient();
         }
-        
-        public override string Identifier => "Speedrun";
 
         [Command("leaderboard")]
         [Alias("Ranking", "LB")]
