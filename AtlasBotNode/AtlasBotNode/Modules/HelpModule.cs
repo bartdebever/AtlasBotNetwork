@@ -4,6 +4,7 @@ using AtlasBotNode.Helpers;
 using Discord.Commands;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
 namespace AtlasBotNode.Modules
 {

@@ -4,16 +4,10 @@ using SpeedrunAPIHandler.Models;
 using System;
 using System.Linq;
 using System.Text;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
-    public interface ISpeedrunEmbedGenerator : IEmbedGenerator
-    {
-        ISpeedrunEmbedGenerator CreateLeaderboardEmbed(Leaderboard leaderboard);
-
-        ISpeedrunEmbedGenerator CreateWorldRecordEmbed(Leaderboard leaderboard);
-    }
-
     public class SpeedrunEmbedGenerator : ISpeedrunEmbedGenerator
     {
         private EmbedBuilder _embedBuilder;

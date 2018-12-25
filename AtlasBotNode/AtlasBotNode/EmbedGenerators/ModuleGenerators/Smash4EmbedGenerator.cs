@@ -1,13 +1,9 @@
-﻿using Discord;
+﻿using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using Discord;
 using KhApiHandler.Models;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
-    public interface ISmash4EmbedGenerator : IEmbedGenerator
-    {
-        ISmash4EmbedGenerator CreateCharacterEmbed(Character character);
-    }
-
     public class Smash4EmbedGenerator : ISmash4EmbedGenerator
     {
         private EmbedBuilder _embedBuilder;

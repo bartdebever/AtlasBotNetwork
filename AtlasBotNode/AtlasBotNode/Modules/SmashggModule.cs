@@ -6,6 +6,7 @@ using Discord.Commands;
 using SmashggHandler;
 using System.Linq;
 using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
 namespace AtlasBotNode.Modules
 {

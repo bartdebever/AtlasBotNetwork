@@ -4,6 +4,7 @@ using LoLHandler;
 using Discord.Commands;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using AtlasBotNode.Helpers;
 
 namespace AtlasBotNode.Modules

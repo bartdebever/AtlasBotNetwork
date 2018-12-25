@@ -4,19 +4,11 @@ using ChampionGgApiHandler.Models.Champion;
 using ChampionGgApiHandler.Models.Performance;
 using Discord;
 using System.Text;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using RestSharp.Extensions;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
-    public interface ILeagueEmbedGenerator : IEmbedGenerator
-    {
-        ILeagueEmbedGenerator CreatePerformanceEmbed(Performance performance);
-        ILeagueEmbedGenerator CreateChampionSpellsEmbed(LoLHandler.Dtos.ChampionDto champion, ChampionDto championDto);
-        ILeagueEmbedGenerator CreateChampionEmbed(LoLHandler.Dtos.ChampionDto champion, string internalName);
-        ILeagueEmbedGenerator CreateChampionDataEmbed(ChampionData championData);
-        ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, ChampionDto championDto);
-    }
-
     public class LeagueEmbedGenerator : ILeagueEmbedGenerator
     {
         private EmbedBuilder _embedBuilder;
@@ -66,14 +58,6 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             _embedBuilder.WithThumbnailUrl(
                 $"http://ddragon.leagueoflegends.com/cdn/8.19.1/img/champion/{championDto.InternalName}.png");
 
-//            Didn't enjoy the look of this at all
-//            var infoStringBuilder = new StringBuilder();
-//            foreach (var info in champion.Info)
-//            {
-//                infoStringBuilder.AppendLine($"{info.Key.ToPascalCase(CultureInfo.CurrentCulture)}: {info.Value}");
-//            }
-//            _embedBuilder.AddField("Statistics", infoStringBuilder.ToString());
-
             var spellStringBuilder = new StringBuilder();
             _embedBuilder.AddField("Passive", $"**{champion.Passive.Name}**\n{champion.Passive.Description.Replace("<br>", "\n")}");
             var keys = new string[]{"Q", "W", "E", "R"};
@@ -88,17 +72,17 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 _embedBuilder.AddField(keys[i], spellStringBuilder.ToString());
             }
 
-
-
             return this;
         }
 
         public ILeagueEmbedGenerator CreateChampionEmbed(LoLHandler.Dtos.ChampionDto champion, string internalName)
         {
             ResetBuilder();
-            _embedBuilder.WithImageUrl($"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{internalName}_0.jpg");
-            _embedBuilder.AddField(champion.Name, champion.Title);
-            _embedBuilder.AddField("Commands", $"User \"-lol spells {champion.Name}\" to get details on what spells {champion.Name} has.");
+            _embedBuilder
+                .WithImageUrl($"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{internalName}_0.jpg")
+                .AddField(champion.Name, champion.Title)
+                .AddField("Commands",
+                    $"User \"-lol spells {champion.Name}\" to get details on what spells {champion.Name} has.");
 
             return this;
         }
@@ -169,7 +153,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 
                 foreach (var id in ids)
                 {
-                    hashStringBuilder.Append($"{EmojiGetterHelper.GetEmoji(id)} ");
+                    hashStringBuilder.Append($"{EmojiHelper.GetEmoji(id)} ");
                 }
             }
             else

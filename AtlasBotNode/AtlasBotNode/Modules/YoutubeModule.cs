@@ -1,4 +1,6 @@
-﻿namespace AtlasBotNode.Modules
+﻿using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+
+namespace AtlasBotNode.Modules
 {
     using AtlasBotNode.EmbedGenerators.ModuleGenerators;
     using Discord.Commands;

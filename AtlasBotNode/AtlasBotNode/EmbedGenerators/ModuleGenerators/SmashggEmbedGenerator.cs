@@ -5,18 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
-    public interface ISmashggEmbedGenerator : IEmbedGenerator
-    {
-        ISmashggEmbedGenerator CreateTournamentEmbed(TournamentRoot tournament);
-
-        ISmashggEmbedGenerator CreateTournamentScheduleEmbed(TournamentScheduleRoot tournaments);
-
-        ISmashggEmbedGenerator CreateMatchEmbedGenerator();
-    }
-
     public class SmashggEmbedGenerator : ISmashggEmbedGenerator
     {
         public SmashggEmbedGenerator()

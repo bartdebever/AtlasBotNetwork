@@ -68,12 +68,22 @@ namespace AtlasBotNode
             await Task.Delay(-1);
         }
 
+        /// <summary>
+        /// Installs the commands into Discord.net and allows them to run.
+        /// </summary>
+        /// <returns>An awaitable task.</returns>
         private async Task InstallCommands()
         {
             // Hook the MessageReceived Event into our Command Handler
             _client.MessageReceived += HandleCommand;
+            
             //Add all modules specified in the config file.
-            await AddModules();
+            var moduleLoader = new ModuleLoader();
+            var modules = moduleLoader.GetModules(_configuration.Modules);
+            foreach (var module in modules)
+            {
+                await _commands.AddModuleAsync(module);
+            }
         }
 
         private async Task HandleCommand(SocketMessage messageParam)
@@ -94,6 +104,10 @@ namespace AtlasBotNode
             await _commands.ExecuteAsync(context, argPos, _services);
         }
 
+        /// <summary>
+        /// Sets up the API keys for the API wrappers to run from.
+        /// </summary>
+        /// <param name="config">The config section that includes all the API keys.</param>
         private static void SetApiKeys(KeyConfiguration config)
         {
             KeyStorage.ApiKey = config.Championgg;
@@ -101,6 +115,9 @@ namespace AtlasBotNode
             YoutubeRequester.ApiKey = config.YouTube;
         }
 
+        /// <summary>
+        /// Sets up the commander configuration.
+        /// </summary>
         private void SetupCommander()
         {
             var commanderSection = _configuration.CommanderConfiguration;
@@ -111,16 +128,6 @@ namespace AtlasBotNode
             commanderConnector.Register();
             _client.Log += commanderConnector.LogDiscord;
             _commands.Log += commanderConnector.LogDiscord;
-        }
-
-        private async Task AddModules()
-        {
-            var moduleLoader = new ModuleLoader();
-            var modules = moduleLoader.GetModules(_configuration.Modules);
-            foreach (var module in modules)
-            {
-                await _commands.AddModuleAsync(module);
-            }
         }
     }
 }

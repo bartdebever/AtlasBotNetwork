@@ -13,6 +13,9 @@ namespace AtlasBotNode.Configuration
     {
         private readonly Dictionary<string, Type> _modules;
 
+        /// <summary>
+        /// Initializes an instance of the <see cref="ModuleLoader"/> class.
+        /// </summary>
         public ModuleLoader()
         {
             _modules = new Dictionary<string, Type>()

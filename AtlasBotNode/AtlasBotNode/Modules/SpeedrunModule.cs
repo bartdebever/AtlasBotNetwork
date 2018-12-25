@@ -4,6 +4,7 @@ using Discord;
 using Discord.Commands;
 using SpeedrunAPIHandler;
 using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
 namespace AtlasBotNode.Modules
 {

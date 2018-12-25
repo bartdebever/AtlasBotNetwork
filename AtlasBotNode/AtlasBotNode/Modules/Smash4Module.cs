@@ -3,6 +3,7 @@ using Discord.Commands;
 using KhApiHandler;
 using SmashggHandler.Models;
 using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
 namespace AtlasBotNode.Modules
 {

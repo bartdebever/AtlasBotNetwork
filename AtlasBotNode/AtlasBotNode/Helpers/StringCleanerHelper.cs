@@ -81,7 +81,7 @@ namespace AtlasBotNode.Helpers
 
         public static string ToEmoji(this int id)
         {
-            var emote = EmojiGetterHelper.GetEmoji($"{id}");
+            var emote = EmojiHelper.GetEmoji($"{id}");
             if (emote == null)
                 return id.ToString();
             return emote.ToString();

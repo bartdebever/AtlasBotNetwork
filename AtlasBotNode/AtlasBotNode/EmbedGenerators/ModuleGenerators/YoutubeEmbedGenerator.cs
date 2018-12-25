@@ -1,15 +1,11 @@
 ﻿using System.Text;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
     using Discord;
 
     using YoutubeApiHandler.Results;
-
-    public interface IYoutubeEmbedGenerator : IEmbedGenerator
-    {
-        IYoutubeEmbedGenerator CreateChannelEmbed(YoutubeChannelResult channel);
-    }
 
     public class YoutubeEmbedGenerator : IYoutubeEmbedGenerator
     {

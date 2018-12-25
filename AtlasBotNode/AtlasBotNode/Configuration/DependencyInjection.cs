@@ -1,5 +1,6 @@
 using AtlasBotNode.EmbedGenerators;
 using AtlasBotNode.EmbedGenerators.ModuleGenerators;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using AtlasBotNode.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 
