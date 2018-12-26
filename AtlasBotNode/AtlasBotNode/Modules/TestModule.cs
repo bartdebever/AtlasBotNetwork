@@ -4,6 +4,7 @@ using Discord;
 using Discord.Commands;
 using System;
 using System.Threading.Tasks;
+using AtlasBotNode.Webhook;
 
 namespace AtlasBotNode.Modules
 {
@@ -29,7 +30,8 @@ namespace AtlasBotNode.Modules
         [Command("Test2")]
         public async Task Test2([Summary("TestParam1")] string text)
         {
-            await ReplyAsync(text);
+            var webhookClient = new WebhookTest();
+            await webhookClient.SendTestMessage(text);
         }
     }
 }

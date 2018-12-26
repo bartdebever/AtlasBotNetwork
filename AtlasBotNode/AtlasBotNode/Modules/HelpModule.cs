@@ -1,13 +1,12 @@
-﻿using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators;
-using AtlasBotNode.Helpers;
-using Discord.Commands;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
-
-namespace AtlasBotNode.Modules
+﻿namespace AtlasBotNode.Modules
 {
+    using System.Threading.Tasks;
+    using Discord.Commands;
+    using EmbedGenerators;
+    using EmbedGenerators.ModuleGenerators.Interfaces;
+
+    using Helpers;
+
     [Group("Help")]
     public class HelpModule : ModuleBase
     {
@@ -26,7 +25,7 @@ namespace AtlasBotNode.Modules
         {
             var embed = _helpEmbedGenerator.GenerateHelpListEmbed(DiscordCommandHelper.CommandService.Modules).Build();
 
-            await ReplyAsync("", embed: embed);
+            await ReplyAsync(string.Empty, embed: embed);
         }
     }
 }

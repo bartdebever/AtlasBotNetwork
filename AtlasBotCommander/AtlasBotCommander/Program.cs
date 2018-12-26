@@ -2,10 +2,15 @@
 using System.Linq;
 using System.Threading;
 using AtlasBotCommander.Communication;
-using AtlasBotCommander.Loggers;
+using AtlasBotCommander.Interfaces;
+
 using Discord.Rest;
 using Microsoft.Extensions.Logging;
+
+using NLog;
 using NLog.Extensions.Logging;
+
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace AtlasBotCommander
 {
@@ -21,21 +26,30 @@ namespace AtlasBotCommander
     {
         public class Program
         {
-            private NodeHub _nodeHub;
             private static DiscordSocketClient _client;
+            private NodeHub _nodeHub;
             private IServiceProvider _services;
-            private static void Main(string[] args) => new Program().Start().GetAwaiter().GetResult();
+            private IAtlasHub _altasHub;
 
-            private async Task Start()
+            private Logger _logger = LogManager.GetCurrentClassLogger();
+
+            private static void Main(string[] args) => new Program().Start();
+
+            private void Start()
             {
+                _altasHub = new MessageHub();
+                _altasHub.Setup();
+                _altasHub.Connect();
+                _altasHub.Subscribe();
+                _logger.Info("Started client");
                 InjectDependencies();
-                _nodeHub = _services.GetRequiredService<NodeHub>();
-                _client = new DiscordSocketClient();
-                await _client.LoginAsync(TokenType.Bot, "NDg5MTY5ODMwMzY5NDI3NDcw.Dnm2sQ.sSco-_V64lho2H3uKwTC19M9WMo");
-                await _client.StartAsync();
-
-                new Thread(() => { _nodeHub.Listen(); }).Start();
-                await Task.Delay(-1);
+                // _nodeHub = _services.GetRequiredService<NodeHub>();
+                // _client = new DiscordSocketClient();
+                // await _client.LoginAsync(TokenType.Bot, "NDg5MTY5ODMwMzY5NDI3NDcw.Dnm2sQ.sSco-_V64lho2H3uKwTC19M9WMo");
+                // await _client.StartAsync();
+                //
+                // new Thread(() => { _nodeHub.Listen(); }).Start();
+                Console.ReadKey();
             }
 
             public static async Task LogMessage(string message)
@@ -47,6 +61,7 @@ namespace AtlasBotCommander
                     await messageChannel.SendMessageAsync(message);
                 }
             }
+
             private void InjectDependencies()
             {
                 var serviceCollection = new ServiceCollection();

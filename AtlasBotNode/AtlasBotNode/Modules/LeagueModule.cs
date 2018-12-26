@@ -1,14 +1,13 @@
-﻿using AtlasBotNode.EmbedGenerators.ModuleGenerators;
-using ChampionGgApiHandler;
-using LoLHandler;
-using Discord.Commands;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
-using AtlasBotNode.Helpers;
-
-namespace AtlasBotNode.Modules
+﻿namespace AtlasBotNode.Modules
 {
+    using System.Runtime.InteropServices;
+    using System.Threading.Tasks;
+    using ChampionGgApiHandler;
+    using Discord.Commands;
+    using EmbedGenerators.ModuleGenerators.Interfaces;
+    using Helpers;
+    using LoLHandler;
+
     [Group("lol")]
     [Alias("league")]
     public class LeagueModule : ModuleBase
@@ -31,9 +30,12 @@ namespace AtlasBotNode.Modules
         {
             var performance = await _championGgClient.Performance.GetDefaultPerformance();
             if (performance == null)
+            {
                 await ReplyAsync("Unable to get performance");
+            }
+
             var response = _leagueEmbedGenerator.CreatePerformanceEmbed(performance).Build();
-            await ReplyAsync("", embed: response);
+            await ReplyAsync(string.Empty, embed: response);
         }
 
         [Command("champion")]
@@ -42,7 +44,7 @@ namespace AtlasBotNode.Modules
             var champion = LoLChampionHelper.GetChampionByName(championName);
             var championDto = await _lolClient.Champions.GetChampionByNameAsync(champion.InternalName);
             var embed = _leagueEmbedGenerator.CreateChampionEmbed(championDto, champion.InternalName).Build();
-            await ReplyAsync("", embed: embed);
+            await ReplyAsync(string.Empty, embed: embed);
         }
 
         [Command("spells")]
@@ -57,7 +59,7 @@ namespace AtlasBotNode.Modules
 
             var championDto = await _lolClient.Champions.GetChampionByNameAsync(champion.InternalName);
             var response = _leagueEmbedGenerator.CreateChampionSpellsEmbed(championDto, champion).Build();
-            await ReplyAsync("", embed: response);
+            await ReplyAsync(string.Empty, embed: response);
         }
 
         [Command("stats")]
@@ -65,9 +67,12 @@ namespace AtlasBotNode.Modules
         {
             var championData = await _championGgClient.Champions.GetChampionStats(championId);
             if (championData == null)
+            {
                 await ReplyAsync("Unable to get that champion");
+            }
+
             var response = _leagueEmbedGenerator.CreateChampionDataEmbed(championData).Build();
-            await ReplyAsync("", embed: response);
+            await ReplyAsync(string.Empty, embed: response);
         }
 
         [Command("build")]
@@ -75,10 +80,13 @@ namespace AtlasBotNode.Modules
         {
             var championDto = LoLChampionHelper.GetChampionByName(champion);
             var championData = await _championGgClient.Champions.GetChampionStats(championDto.Id);
-            if(championData == null)
+            if (championData == null)
+            {
                 await ReplyAsync("Unable to get that champion");
+            }
+
             var response = _leagueEmbedGenerator.CreateChampionBuildEmbed(championData, championDto).Build();
-            await ReplyAsync("", embed: response);
+            await ReplyAsync(string.Empty, embed: response);
         }
     }
 }

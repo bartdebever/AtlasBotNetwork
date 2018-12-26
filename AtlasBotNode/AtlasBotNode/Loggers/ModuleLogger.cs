@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace AtlasBotNode.Loggers
 {
+    /// <summary>
+    /// TODO, remove
+    /// </summary>
     public static class ModuleLogger
     {
         public static Task Logger(LogSeverity severity, string module, string command, string message)
