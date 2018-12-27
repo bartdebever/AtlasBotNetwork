@@ -35,23 +35,33 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             if (tournament?.Entities == null)
                 throw new TournamentNotFoundException();
             ResetBuilder();
-            _builder.WithColor(Color.Blue);
-            _builder.WithAuthor(new EmbedAuthorBuilder().WithName(tournament.Entities?.Tournament?.Name));
-            _builder.WithTimestamp(DateTimeOffset.Now);
-            _builder.AddField("General Info",
+            _builder.WithColor(Color.Blue)
+                .WithAuthor(new EmbedAuthorBuilder().WithName(tournament.Entities?.Tournament?.Name))
+                .WithTimestamp(DateTimeOffset.Now)
+                .AddField("General Info",
                 $"**Name:** {tournament.Entities?.Tournament?.Name}\n" +
                 $"**Venue:** {tournament.Entities?.Tournament?.VenueName}\n" +
                 $"**Starts at:** {tournament.Entities?.Tournament?.StartDate.ToLongDateString()}\n" +
                 $"**Ends at:** {tournament.Entities?.Tournament?.EndDate.ToLongDateString()}"
-                );
+            );
+            
             var profileImage = tournament.Entities?.Tournament?.Images?.FirstOrDefault(x => x.Type.Equals("profile"));
             if (profileImage != null)
+            {
                 _builder.WithThumbnailUrl(profileImage.Url);
+            }
+
             var bannerImage = tournament.Entities?.Tournament?.Images?.FirstOrDefault(x => x.Type.Equals("banner"));
             if (bannerImage != null)
+            {
                 _builder.WithImageUrl(bannerImage.Url);
+            }
+
             if (tournament.Entities.Events == null)
+            {
                 return this;
+            }
+
             foreach (var gameEvent in tournament.Entities.Events.GroupBy(x => x.VideogameId))
             {
                 var game = tournament.Entities.Videogames.FirstOrDefault(x => x.Id == gameEvent.Key) ?? new Videogame { Name = "Other" };
@@ -60,9 +70,13 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 {
                     stringBuilder.AppendLine(@event.Name);
                 }
+
                 if (stringBuilder.Length > 0)
+                {
                     _builder.AddInlineField(game.Name, stringBuilder.ToString());
+                }
             }
+            
             return this;
         }
 
@@ -70,9 +84,12 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         {
             ResetBuilder();
             if (!tournaments.Items.Entities.Tournament.Any())
+            {
                 throw new TournamentNotFoundException();
-            _builder.WithColor(Color.Blue);
-            _builder.WithTitle("Upcoming Tournaments on Smash.gg");
+            }
+
+            _builder.WithColor(Color.Blue)
+                .WithTitle("Upcoming Tournaments on Smash.gg");
             foreach (var tournament in tournaments.Items.Entities.Tournament)
             {
                 var stringBuilder = new StringBuilder();
@@ -84,8 +101,11 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 {
                     stringBuilder.AppendLine(videogames.ElementAt(i).Name);
                     if (i == max - 1 && max != videogames.Count())
+                    {
                         stringBuilder.AppendLine($"And {videogames.Count() - max} more");
+                    }
                 }
+                
                 _builder.AddInlineField(tournament.Name, $"At {tournament.StartDate.ToLongDateString()}\n**Games:** \n{stringBuilder}");
             }
             return this;
@@ -94,10 +114,10 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         public ISmashggEmbedGenerator CreateMatchEmbedGenerator()
         {
             ResetBuilder();
-            _builder.WithTitle("Player1");
-            _builder.AddField("Tournament", $"These games were played for tournament TournamentName\n" +
+            _builder.WithTitle("Player1")
+                .AddField("Tournament", $"These games were played for tournament TournamentName\n" +
                                             $"Use `-smashgg tournament TournamentName` to view more info.");
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var stringBuilder = new StringBuilder();
                 var random = new Random(i);
@@ -105,6 +125,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 {
                     stringBuilder.AppendLine($"**vs Player{y}:** {random.Next(0, 3)} - {random.Next(0, 3)}");
                 }
+                
                 _builder.AddField($"Game{i}", stringBuilder.ToString());
             }
 

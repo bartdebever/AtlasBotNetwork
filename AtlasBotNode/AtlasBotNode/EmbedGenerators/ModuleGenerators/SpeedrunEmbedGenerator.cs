@@ -15,10 +15,10 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 
         private void ResetEmbedBuilder()
         {
-            _embedBuilder = new EmbedBuilder();
-            _embedBuilder.WithColor(Color.Red);
-            _embedBuilder.WithCurrentTimestamp();
-            _embedBuilder.WithFooter("Speedrun.com API");
+            _embedBuilder = new EmbedBuilder()
+                .WithColor(Color.Red)
+                .WithCurrentTimestamp()
+                .WithFooter("Speedrun.com API");
         }
 
         public ISpeedrunEmbedGenerator CreateLeaderboardEmbed(Leaderboard leaderboard)
@@ -31,13 +31,18 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             foreach (var run in leaderboard.RunList)
             {
                 var player = leaderboard.Players.FirstOrDefault(x => x.Id == run.Run.Players[0]?.Id);
-                stringBuilder.AppendLine($"**{StringCleanerHelper.NumberToRanking(run.Place)}**: {player?.Names["international"]} {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}");
+                stringBuilder.AppendLine($"**{StringCleanerHelper.NumberToRanking(run.Place)}**: {player?.Names["international"]}" +
+                                         $" {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}");
             }
+            
             _embedBuilder.AddField("Runs", stringBuilder);
 
             var icon = leaderboard.Game.Assets["icon"];
             if (icon != null)
+            {
                 _embedBuilder.WithThumbnailUrl(icon.Uri);
+            }
+
             return this;
         }
 
@@ -48,20 +53,28 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             var run = leaderboard.RunList[0];
             var runner = leaderboard.Players.FirstOrDefault(x => x.Id == run.Run.Players[0].Id);
             if (run == null || runner == null)
+            {
+                //TODO rework.
                 throw new Exception();
+            }
+
             _embedBuilder.WithTitle(
-                $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} World Record");
-            _embedBuilder.WithUrl(leaderboard.WebLink);
-            _embedBuilder.AddField("World Record",
-                $"**{runner.Names["international"]}:** {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}\n" +
-                $"Check out the run at: {run.Run.WebLink}"
-            );
+                $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} World Record")
+                .WithUrl(leaderboard.WebLink)
+                .AddField("World Record",
+                    $"**{runner.Names["international"]}:** {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}\n" +
+                    $"Check out the run at: {run.Run.WebLink}"
+                );
 
             if (leaderboard.Game.Assets.ContainsKey("cover-medium"))
+            {
                 _embedBuilder.WithThumbnailUrl(leaderboard.Game.Assets["cover-medium"].Uri);
+            }
 
             if (leaderboard.Game.Assets.ContainsKey("icon"))
+            {
                 _embedBuilder.WithImageUrl(leaderboard.Game.Assets["icon"].Uri);
+            }
 
             return this;
         }

@@ -5,7 +5,13 @@ namespace AtlasBotNode.Configuration
     using System.Linq;
     using Discord.Commands;
     using Modules;
-
+    using Modules.Help;
+    using Modules.League;
+    using Modules.Roles;
+    using Modules.Smash;
+    using Modules.Speedrun;
+    using Modules.YouTube;
+    
     /// <summary>
     /// A helper class to load all the modules needed for this node.
     /// </summary>

@@ -4,13 +4,10 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-using RabbitMQ.Client;
-
 namespace AtlasBotNode.Loggers
 {
     public static class DefaultLogger
     {
-        private static IConnectionFactory _factory = new ConnectionFactory() { HostName = "localhost" };
         public static async Task Logger(LogMessage message)
         {
             switch (message.Severity)
@@ -33,24 +30,6 @@ namespace AtlasBotNode.Loggers
                 case LogSeverity.Debug:
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     break;
-            }
-            using (var connection = _factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(
-                    queue: "logs",
-                    durable: false,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
-
-                var body = Encoding.UTF8.GetBytes(message.Message);
-
-                channel.BasicPublish(
-                    exchange: string.Empty,
-                    routingKey: "logs",
-                    basicProperties: null,
-                    body: body);
             }
 
             Console.WriteLine($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}");

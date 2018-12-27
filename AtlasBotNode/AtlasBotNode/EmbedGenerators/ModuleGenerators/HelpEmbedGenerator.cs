@@ -28,9 +28,9 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         /// <inheritdoc />
         public IHelpEmbedGenerator GenerateHelpListEmbed(IEnumerable<ModuleInfo> modules)
         {
-            _embedBuilder.WithTitle("Command List");
-            _embedBuilder.WithColor(Color.Blue);
-            _embedBuilder.WithCurrentTimestamp();
+            _embedBuilder.WithTitle("Command List")
+                .WithColor(Color.Blue)
+                .WithCurrentTimestamp();
 
             foreach (var module in modules)
             {
