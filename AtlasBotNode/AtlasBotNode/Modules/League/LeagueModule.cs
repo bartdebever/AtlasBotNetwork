@@ -1,4 +1,4 @@
-﻿namespace AtlasBotNode.Modules
+﻿namespace AtlasBotNode.Modules.League
 {
     using System.Runtime.InteropServices;
     using System.Threading.Tasks;

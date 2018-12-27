@@ -4,7 +4,6 @@ using Discord;
 using Discord.Commands;
 using System;
 using System.Threading.Tasks;
-using AtlasBotNode.Webhook;
 
 namespace AtlasBotNode.Modules
 {
@@ -25,13 +24,6 @@ namespace AtlasBotNode.Modules
             await DefaultLogger.Logger(new LogMessage(LogSeverity.Error, "TestModule", "TestModule has crashed!",
                 new DllNotFoundException()));
             await ReplyAsync("", embed: embed);
-        }
-
-        [Command("Test2")]
-        public async Task Test2([Summary("TestParam1")] string text)
-        {
-            var webhookClient = new WebhookTest();
-            await webhookClient.SendTestMessage(text);
         }
     }
 }

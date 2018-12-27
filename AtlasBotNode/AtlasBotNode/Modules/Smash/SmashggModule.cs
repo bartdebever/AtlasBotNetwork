@@ -1,4 +1,4 @@
-﻿namespace AtlasBotNode.Modules
+﻿namespace AtlasBotNode.Modules.Smash
 {
     using System.Linq;
     using System.Threading.Tasks;

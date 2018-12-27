@@ -1,4 +1,4 @@
-﻿namespace AtlasBotNode.Modules
+﻿namespace AtlasBotNode.Modules.Smash
 {
     using System.Threading.Tasks;
     using Discord.Commands;
