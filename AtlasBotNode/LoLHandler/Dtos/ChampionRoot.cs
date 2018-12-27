@@ -7,6 +7,7 @@ namespace LoLHandler.Dtos
 {
     public class ChampionRoot
     {
-        [JsonProperty("data")] public Dictionary<string, ChampionDto> Champions { get; set; }
+        [JsonProperty("data")]
+        public Dictionary<string, ChampionDto> Champions { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Text;
 using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using SpeedrunAPIHandler.Models.Leaderboards;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {

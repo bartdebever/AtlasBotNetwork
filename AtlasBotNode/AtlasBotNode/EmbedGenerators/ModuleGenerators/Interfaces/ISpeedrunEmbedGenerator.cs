@@ -1,4 +1,5 @@
 ﻿using SpeedrunAPIHandler.Models;
+using SpeedrunAPIHandler.Models.Leaderboards;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces
 {

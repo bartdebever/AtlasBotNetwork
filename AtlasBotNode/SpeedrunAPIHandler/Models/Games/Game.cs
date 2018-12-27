@@ -1,14 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace SpeedrunAPIHandler.Models
+namespace SpeedrunAPIHandler.Models.Games
 {
-    public class RunGame
-    {
-        [JsonProperty("data")]
-        public Game Game { get; set; }
-    }
-
     public class Game
     {
         [JsonProperty("names")]

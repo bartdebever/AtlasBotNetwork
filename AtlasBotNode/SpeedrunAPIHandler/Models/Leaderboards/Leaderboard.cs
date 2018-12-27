@@ -1,14 +1,10 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using SpeedrunAPIHandler.Models.Categories;
+using SpeedrunAPIHandler.Models.Games;
 
-namespace SpeedrunAPIHandler.Models
+namespace SpeedrunAPIHandler.Models.Leaderboards
 {
-    public class RootLeaderboard
-    {
-        [JsonProperty("data")]
-        public Leaderboard Leaderboard { get; set; }
-    }
-
     public class Leaderboard
     {
         [JsonProperty("weblink")]
@@ -30,20 +26,5 @@ namespace SpeedrunAPIHandler.Models
 
         public string GetCategoryName => Category?.Category?.Name;
         public IEnumerable<User> Players => LeaderboardPlayers?.Players;
-    }
-
-    public class LeaderboardPlayers
-    {
-        [JsonProperty("data")]
-        public List<User> Players { get; set; }
-    }
-
-    public class RunList
-    {
-        [JsonProperty("place")]
-        public int Place { get; set; }
-
-        [JsonProperty("run")]
-        public Run Run { get; set; }
     }
 }

@@ -29,7 +29,9 @@ namespace ChampionGgApiHandler.Modules
             var response = await client.ExecuteTaskAsync(request);
 
             if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+            {
                 throw new ServiceNotAvailableException();
+            }
 
             return JsonConvert.DeserializeObject<List<ChampionData>>(response.Content)[0];
         }

@@ -3,6 +3,7 @@ using RestSharp;
 using SpeedrunAPIHandler.Models;
 using System;
 using System.Threading.Tasks;
+using SpeedrunAPIHandler.Models.Leaderboards;
 
 namespace SpeedrunAPIHandler.Modules
 {

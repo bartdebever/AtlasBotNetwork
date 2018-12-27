@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
-using Discord;
-using LogMessage = AtlasModels.Logging.LogMessage;
-
-namespace AtlasBotNode.Communication
+﻿namespace AtlasBotNode.Communication
 {
+    using System;
+    using System.IO;
+    using System.Net.Sockets;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Threading.Tasks;
+    using Discord;
+    using LogMessage = AtlasModels.Logging.LogMessage;
+    
     public class CommanderConnector
     {
         public CommanderConnector(string ip, int port, string nodeName, string token)

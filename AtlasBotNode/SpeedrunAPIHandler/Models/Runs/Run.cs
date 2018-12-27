@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace SpeedrunAPIHandler.Models
+namespace SpeedrunAPIHandler.Models.Runs
 {
     public class Run
     {
@@ -16,17 +16,5 @@ namespace SpeedrunAPIHandler.Models
 
         [JsonProperty("players")]
         public List<RunPlayer> Players { get; set; }
-    }
-
-    public class Times
-    {
-        [JsonProperty("primary")]
-        public string Primary { get; set; }
-    }
-
-    public class RunPlayer
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
     }
 }

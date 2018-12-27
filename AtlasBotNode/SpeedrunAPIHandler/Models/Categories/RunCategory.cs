@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpeedrunAPIHandler.Models
+namespace SpeedrunAPIHandler.Models.Categories
 {
     public class RunCategory
     {
         [JsonProperty("data")]
         public Category Category { get; set; }
-    }
-
-    public class Category
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
     }
 }
