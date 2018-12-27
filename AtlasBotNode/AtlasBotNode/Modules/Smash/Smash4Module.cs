@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
-using Discord.Commands;
-using KhApiHandler;
-
-namespace AtlasBotNode.Modules.Smash
+﻿namespace AtlasBotNode.Modules
 {
+    using System.Threading.Tasks;
+    using Discord.Commands;
+    using EmbedGenerators.ModuleGenerators.Interfaces;
+    using KhApiHandler;
+
     [Group("smash4")]
     [Alias("SB4", "S4")]
     public class Smash4Module : ModuleBase
@@ -24,7 +24,7 @@ namespace AtlasBotNode.Modules.Smash
         {
             var character = await _apiClient.Characters.GetCharacterByName(characterName);
             var response = _smash4EmbedGenerator.CreateCharacterEmbed(character).Build();
-            await ReplyAsync("", embed: response);
+            await ReplyAsync(string.Empty, embed: response);
         }
     }
 }

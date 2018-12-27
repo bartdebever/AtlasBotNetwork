@@ -12,16 +12,19 @@
 
         private IConnection _connection;
 
+        /// <inheritdoc/>
         public void Setup()
         {
             _factory = new ConnectionFactory() { HostName = "localhost" };
         }
 
+        /// <inheritdoc/>
         public void Connect()
         {
             _connection = _factory.CreateConnection();
         }
 
+        /// <inheritdoc/>
         public void Subscribe()
         {
             using (var channel = _connection.CreateModel())

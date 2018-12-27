@@ -1,14 +1,14 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
-using AtlasBotNode.Helpers;
-using Discord;
-using Discord.Commands;
-using SmashggHandler;
-
-namespace AtlasBotNode.Modules.Smash
+﻿namespace AtlasBotNode.Modules
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Discord;
+    using Discord.Commands;
+    using EmbedGenerators;
+    using EmbedGenerators.ModuleGenerators.Interfaces;
+    using Helpers;
+    using SmashggHandler;
+
     [Group("Smashgg")]
     public class SmashggModule : ModuleBase
     {
@@ -33,11 +33,19 @@ namespace AtlasBotNode.Modules.Smash
             name = _inputSanitizer.SmashggTournamentReplacement(name);
             var tournament = await _smashggClient.TournamentEndpoint.GetTournamentByName(name);
             if (tournament == null)
-                response = _defaultEmbedGenerator.GenerateNotFoundEmbed("Smashgg", "Tournament",
-                    "Tournament has not been found!", "The tournament you were looking for has not been found").Build();
+            {
+                response = _defaultEmbedGenerator.GenerateNotFoundEmbed(
+                    "Smashgg",
+                    "Tournament",
+                    "Tournament has not been found!",
+                    "The tournament you were looking for has not been found").Build();
+            }
             else
+            {
                 response = _smashggEmbedGenerator.CreateTournamentEmbed(tournament).Build();
-            await ReplyAsync("", embed: response);
+            }
+
+            await ReplyAsync(string.Empty, embed: response);
         }
 
         [Command("Upcoming")]
@@ -47,10 +55,18 @@ namespace AtlasBotNode.Modules.Smash
             Embed response;
             var tournaments = await _smashggClient.TournamentEndpoint.GetUpcomingTournaments();
             if (tournaments == null || !tournaments.Items.Entities.Tournament.Any())
-                response = _defaultEmbedGenerator.GenerateNotFoundEmbed("Smashgg", "Tournament",
-                    "No upcoming tournaments", "There are no upcoming tournaments on Smash.gg :(").Build();
+            {
+                response = _defaultEmbedGenerator.GenerateNotFoundEmbed(
+                    "Smashgg",
+                    "Tournament",
+                    "No upcoming tournaments",
+                    "There are no upcoming tournaments on Smash.gg :(").Build();
+            }
             else
+            {
                 response = _smashggEmbedGenerator.CreateTournamentScheduleEmbed(tournaments).Build();
+            }
+
             await ReplyAsync("", embed: response);
         }
 

@@ -1,7 +1,7 @@
-using AtlasBotNode.Configuration.Models;
-
 namespace AtlasBotNode.Configuration
 {
+    using Models;
+
     public interface IConfigurationLoader<T>
     {
         /// <summary>

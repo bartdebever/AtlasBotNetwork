@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
-using Discord;
-using Discord.Commands;
-using SpeedrunAPIHandler;
-
-namespace AtlasBotNode.Modules.Speedrun
+﻿namespace AtlasBotNode.Modules
 {
+    using System.Threading.Tasks;
+    using Discord;
+    using Discord.Commands;
+    using EmbedGenerators;
+    using EmbedGenerators.ModuleGenerators.Interfaces;
+    using SpeedrunAPIHandler;
+
     [Group("Speedrun")]
     [Alias("SR")]
     public class SpeedrunModule : ModuleBase
@@ -29,18 +29,21 @@ namespace AtlasBotNode.Modules.Speedrun
             Embed response;
             try
             {
-                var leaderboard = await _speedrunApiClient.LeaderboardModule.GetLeaderboard(game, category.Replace("%", ""));
+                var leaderboard = await _speedrunApiClient.LeaderboardModule.GetLeaderboard(game, category.Replace("%", string.Empty));
                 response = _speedrunEmbedGenerator.CreateLeaderboardEmbed(leaderboard)
                     .Build();
             }
             catch
             {
-                response = _defaultEmbedGenerator.GenerateNotFoundEmbed("speedrun", "leaderboard", "Can't find game or Category",
+                response = _defaultEmbedGenerator.GenerateNotFoundEmbed(
+                        "speedrun",
+                        "leaderboard",
+                        "Can't find game or Category",
                     "Game or Category was not found, sorry!\nThe Speedrun.com API can be a little specific, there will be a guide on how to get everything right soon.")
                     .Build();
             }
 
-            await ReplyAsync("", embed: response);
+            await ReplyAsync(string.Empty, embed: response);
         }
 
         [Command("worldrecord")]
@@ -51,12 +54,15 @@ namespace AtlasBotNode.Modules.Speedrun
             try
             {
                 var leaderboard =
-                    await _speedrunApiClient.LeaderboardModule.GetLeaderboard(game, category.Replace("%", ""), 1);
+                    await _speedrunApiClient.LeaderboardModule.GetLeaderboard(game, category.Replace("%", string.Empty), 1);
                 response = _speedrunEmbedGenerator.CreateWorldRecordEmbed(leaderboard).Build();
             }
             catch
             {
-                response = _defaultEmbedGenerator.GenerateNotFoundEmbed("speedrun", "worldrecord", "Can't find game or Category",
+                response = _defaultEmbedGenerator.GenerateNotFoundEmbed(
+                        "speedrun",
+                        "worldrecord",
+                        "Can't find game or Category",
                     "Game or Category was not found, sorry!\nThe Speedrun.com API can be a little specific, there will be a guide on how to get everything right soon.")
                     .Build();
             }
