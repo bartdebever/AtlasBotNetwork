@@ -1,14 +1,13 @@
-﻿using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using AtlasBotNode.Helpers;
 using Discord;
 using Discord.Commands;
 using SmashggHandler;
-using System.Linq;
-using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
-namespace AtlasBotNode.Modules
+namespace AtlasBotNode.Modules.Smash
 {
     [Group("Smashgg")]
     public class SmashggModule : ModuleBase

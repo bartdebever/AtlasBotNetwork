@@ -1,12 +1,10 @@
-﻿using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+﻿using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using Discord.Commands;
+using YoutubeApiHandler;
 
-namespace AtlasBotNode.Modules
+namespace AtlasBotNode.Modules.YouTube
 {
-    using AtlasBotNode.EmbedGenerators.ModuleGenerators;
-    using Discord.Commands;
-    using System.Threading.Tasks;
-    using YoutubeApiHandler;
-
     /// <summary>
     /// Module made to get data from the YouTube API.
     /// </summary>

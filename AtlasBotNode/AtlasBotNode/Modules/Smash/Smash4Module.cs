@@ -1,11 +1,9 @@
-﻿using AtlasBotNode.EmbedGenerators.ModuleGenerators;
+﻿using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using Discord.Commands;
 using KhApiHandler;
-using SmashggHandler.Models;
-using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
-namespace AtlasBotNode.Modules
+namespace AtlasBotNode.Modules.Smash
 {
     [Group("smash4")]
     [Alias("SB4", "S4")]

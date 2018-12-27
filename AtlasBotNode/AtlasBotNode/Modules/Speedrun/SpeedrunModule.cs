@@ -1,12 +1,11 @@
-﻿using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators;
+﻿using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using Discord;
 using Discord.Commands;
 using SpeedrunAPIHandler;
-using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
-namespace AtlasBotNode.Modules
+namespace AtlasBotNode.Modules.Speedrun
 {
     [Group("Speedrun")]
     [Alias("SR")]

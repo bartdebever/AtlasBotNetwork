@@ -1,12 +1,10 @@
-﻿using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators;
+﻿using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using AtlasBotNode.Helpers;
 using Discord.Commands;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 
-namespace AtlasBotNode.Modules
+namespace AtlasBotNode.Modules.Help
 {
     [Group("Help")]
     public class HelpModule : ModuleBase

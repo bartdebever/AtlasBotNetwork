@@ -1,11 +1,11 @@
 ﻿using System;
-using Discord;
-using Discord.Commands;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
 
-namespace AtlasBotNode.Modules
+namespace AtlasBotNode.Modules.Roles
 {
     [Group("Role")]
     [Alias("region", "rank")]

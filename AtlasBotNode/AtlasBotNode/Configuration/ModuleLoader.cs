@@ -2,6 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AtlasBotNode.Modules;
+using AtlasBotNode.Modules.Help;
+using AtlasBotNode.Modules.League;
+using AtlasBotNode.Modules.Roles;
+using AtlasBotNode.Modules.Smash;
+using AtlasBotNode.Modules.Speedrun;
+using AtlasBotNode.Modules.YouTube;
 using Discord.Commands;
 
 namespace AtlasBotNode.Configuration

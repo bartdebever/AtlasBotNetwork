@@ -1,13 +1,12 @@
-﻿using AtlasBotNode.EmbedGenerators.ModuleGenerators;
-using ChampionGgApiHandler;
-using LoLHandler;
-using Discord.Commands;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using AtlasBotNode.Helpers;
+using ChampionGgApiHandler;
+using Discord.Commands;
+using LoLHandler;
 
-namespace AtlasBotNode.Modules
+namespace AtlasBotNode.Modules.League
 {
     [Group("lol")]
     [Alias("league")]
