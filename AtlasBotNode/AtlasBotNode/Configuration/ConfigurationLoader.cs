@@ -20,8 +20,7 @@ namespace AtlasBotNode.Configuration
         {
             if (!File.Exists(input))
             {
-                // TODO proper error handling
-                throw new ArgumentException(nameof(input));
+                throw new FileNotFoundException();
             }
 
             var jsonData = File.ReadAllText(input);

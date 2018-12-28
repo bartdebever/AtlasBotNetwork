@@ -3,11 +3,6 @@ using Discord;
 
 namespace AtlasBotNode.EmbedGenerators
 {
-    public interface IDefaultEmbedGenerator : IEmbedGenerator
-    {
-        DefaultEmbedGenerator GenerateNotFoundEmbed(string module, string command, string title, string message);
-    }
-
     public class DefaultEmbedGenerator : IDefaultEmbedGenerator
     {
         private readonly EmbedBuilder _embedBuilder;
