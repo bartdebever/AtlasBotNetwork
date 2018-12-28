@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChampionGgApiHandler", "Cha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoutubeApiHandler", "YoutubeApiHandler\YoutubeApiHandler.csproj", "{02BBE03A-7F6E-405E-A52D-BC3FDF2FD325}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoLHandler", "LoLHandler\LoLHandler.csproj", "{7E8E48BA-842B-436C-9942-49AAD25D230F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoLHandler", "LoLHandler\LoLHandler.csproj", "{7E8E48BA-842B-436C-9942-49AAD25D230F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmashggNet", "SmashggNet\SmashggNet.csproj", "{DCDC187B-2516-4821-8739-D05C8E80ACD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{7E8E48BA-842B-436C-9942-49AAD25D230F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E8E48BA-842B-436C-9942-49AAD25D230F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E8E48BA-842B-436C-9942-49AAD25D230F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCDC187B-2516-4821-8739-D05C8E80ACD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDC187B-2516-4821-8739-D05C8E80ACD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDC187B-2516-4821-8739-D05C8E80ACD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDC187B-2516-4821-8739-D05C8E80ACD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{B289FEAD-9CD0-4386-B0ED-C77AC7072539} = {EBAD2684-2CDF-49AB-B215-15E7BD0B325C}
 		{02BBE03A-7F6E-405E-A52D-BC3FDF2FD325} = {EBAD2684-2CDF-49AB-B215-15E7BD0B325C}
 		{7E8E48BA-842B-436C-9942-49AAD25D230F} = {EBAD2684-2CDF-49AB-B215-15E7BD0B325C}
+		{DCDC187B-2516-4821-8739-D05C8E80ACD5} = {EBAD2684-2CDF-49AB-B215-15E7BD0B325C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D0B9E05-04AC-48FF-B5FE-0C3814F8F7E9}

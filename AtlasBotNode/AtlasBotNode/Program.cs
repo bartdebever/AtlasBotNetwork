@@ -16,6 +16,9 @@ using AtlasBotNode.Configuration;
 using AtlasBotNode.Configuration.Models;
 using ChampionGgApiHandler;
 using Microsoft.Extensions.Configuration;
+
+using SmashggNet;
+
 using SpeedrunAPIHandler;
 using YoutubeApiHandler;
 
@@ -76,7 +79,7 @@ namespace AtlasBotNode
         {
             // Hook the MessageReceived Event into our Command Handler
             _client.MessageReceived += HandleCommand;
-            
+
             //Add all modules specified in the config file.
             var moduleLoader = new ModuleLoader();
             var modules = moduleLoader.GetModules(_configuration.Modules);
@@ -113,6 +116,7 @@ namespace AtlasBotNode
             KeyStorage.ApiKey = config.Championgg;
             SpeedrunAPIClient.ApiKey = config.Speedrun;
             YoutubeRequester.ApiKey = config.YouTube;
+            SmashggNewClient.ApiToken = config.Smashgg;
         }
 
         /// <summary>
@@ -121,8 +125,10 @@ namespace AtlasBotNode
         private void SetupCommander()
         {
             var commanderSection = _configuration.CommanderConfiguration;
-            var commanderConnector = new CommanderConnector(commanderSection.IpAddress,
-                commanderSection.Port, commanderSection.NodeName,
+            var commanderConnector = new CommanderConnector(
+                commanderSection.IpAddress,
+                commanderSection.Port,
+                commanderSection.NodeName,
                 commanderSection.CommanderToken);
             commanderConnector.Connect();
             commanderConnector.Register();

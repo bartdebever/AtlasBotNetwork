@@ -10,6 +10,7 @@
     <PackageReference Include="Discord.Net.Core" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +19,7 @@
     <ProjectReference Include="..\KhApiHandler\KhApiHandler.csproj" />
     <ProjectReference Include="..\LoLHandler\LoLHandler.csproj" />
     <ProjectReference Include="..\SmashggHandler\SmashggHandler.csproj" />
+    <ProjectReference Include="..\SmashggNet\SmashggNet.csproj" />
     <ProjectReference Include="..\SpeedrunAPIHandler\SpeedrunAPIHandler.csproj" />
     <ProjectReference Include="..\YoutubeApiHandler\YoutubeApiHandler.csproj" />
   </ItemGroup>

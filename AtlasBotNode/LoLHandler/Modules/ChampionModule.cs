@@ -17,7 +17,10 @@ namespace LoLHandler.Modules
         {
             var file = $"{_baseFolder}/{name}.json";
             if (!File.Exists(file))
+            {
                 return null;
+            }
+
             string lines;
             var fileStream = new FileStream(file, FileMode.Open);
             using (var reader = new StreamReader(fileStream))

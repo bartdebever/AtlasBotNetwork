@@ -25,5 +25,10 @@ namespace AtlasBotNode.Configuration.Models
         /// Gets or sets the key used for the Speedrun.com API.
         /// </summary>
         public string Speedrun { get; set; }
+
+        /// <summary>
+        /// Gets or sets the token used for the smash.gg API.
+        /// </summary>
+        public string Smashgg { get; set; }
     }
 }

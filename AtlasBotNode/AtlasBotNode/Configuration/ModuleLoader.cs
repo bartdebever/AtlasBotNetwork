@@ -11,7 +11,7 @@ namespace AtlasBotNode.Configuration
     using Modules.Smash;
     using Modules.Speedrun;
     using Modules.YouTube;
-    
+
     /// <summary>
     /// A helper class to load all the modules needed for this node.
     /// </summary>
@@ -34,7 +34,8 @@ namespace AtlasBotNode.Configuration
                 { "Smashgg", typeof(SmashggModule) },
                 { "Speedrun", typeof(SpeedrunModule) },
                 { "Test", typeof(TestModule) },
-                { "YouTube", typeof(YoutubeModule) }
+                { "YouTube", typeof(YoutubeModule) },
+                { "ssg", typeof(SmashggNewModule) }
             };
         }
 
@@ -45,6 +46,11 @@ namespace AtlasBotNode.Configuration
         /// <returns>A collection of types that are derived from <see cref="ModuleBase"/>.</returns>
         public IEnumerable<Type> GetModules(List<string> identifiers)
         {
+            if (identifiers.Count == 1 && identifiers[0] == "All")
+            {
+                return _modules.Select(x => x.Value);
+            }
+
             return _modules.Where(m => identifiers.Contains(m.Key)).Select(m => m.Value);
         }
     }

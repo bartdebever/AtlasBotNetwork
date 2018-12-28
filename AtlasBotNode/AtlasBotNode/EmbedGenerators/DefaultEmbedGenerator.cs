@@ -24,7 +24,6 @@ namespace AtlasBotNode.EmbedGenerators
 
         public DefaultEmbedGenerator GenerateNotFoundEmbed(string module, string command, string title, string message)
         {
-            ModuleLogger.Logger(LogSeverity.Warning, module, command, message);
             _embedBuilder.AddField(title, message);
             _embedBuilder.WithColor(Color.Red);
             _embedBuilder.WithTitle("Not found");
