@@ -11,7 +11,7 @@ namespace AtlasBotNode.Modules.YouTube
     [Group("Youtube")]
     public class YoutubeModule : ModuleBase
     {
-        private readonly YoutubeRequester _youtubeRequester;
+        private readonly YoutubeClient _youtubeClient;
 
         private readonly IYoutubeEmbedGenerator _youtubeEmbedGenerator;
 
@@ -23,7 +23,7 @@ namespace AtlasBotNode.Modules.YouTube
         /// </param>
         public YoutubeModule(IYoutubeEmbedGenerator youtubeEmbedGenerator)
         {
-            this._youtubeRequester = new YoutubeRequester();
+            this._youtubeClient = new YoutubeClient();
             this._youtubeEmbedGenerator = youtubeEmbedGenerator;
         }
 
@@ -35,7 +35,7 @@ namespace AtlasBotNode.Modules.YouTube
         [Command("channel")]
         public async Task GetChannel([Remainder] string name)
         {
-            var channel = await this._youtubeRequester.GetYoutuberByNameAsync(name);
+            var channel = await this._youtubeClient.GetYouTuberByNameAsync(name);
             if (channel == null)
             {
                 await ReplyAsync("Couldn't find that channel, sorry!");

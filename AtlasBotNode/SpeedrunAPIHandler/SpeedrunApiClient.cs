@@ -2,10 +2,14 @@
 
 namespace SpeedrunAPIHandler
 {
-    public class SpeedrunAPIClient
+    public class SpeedrunApiClient
     {
         public static string ApiKey { get; set; }
-        public SpeedrunAPIClient()
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpeedrunApiClient"/> class.
+        /// </summary>
+        public SpeedrunApiClient()
         {
             LeaderboardModule = new LeaderboardModule();
         }

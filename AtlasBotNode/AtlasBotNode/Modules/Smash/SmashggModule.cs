@@ -31,7 +31,7 @@
         {
             Embed response;
             name = _inputSanitizer.SmashggTournamentReplacement(name);
-            var tournament = await _smashggClient.TournamentEndpoint.GetTournamentByName(name);
+            var tournament = await _smashggClient.TournamentEndpoint.GetTournamentByNameAsync(name);
             if (tournament == null)
             {
                 response = _defaultEmbedGenerator.GenerateNotFoundEmbed(
@@ -53,7 +53,7 @@
         public async Task GetUpcomingTournaments()
         {
             Embed response;
-            var tournaments = await _smashggClient.TournamentEndpoint.GetUpcomingTournaments();
+            var tournaments = await _smashggClient.TournamentEndpoint.GetUpcomingTournamentsAsync();
             if (tournaments == null || !tournaments.Items.Entities.Tournament.Any())
             {
                 response = _defaultEmbedGenerator.GenerateNotFoundEmbed(

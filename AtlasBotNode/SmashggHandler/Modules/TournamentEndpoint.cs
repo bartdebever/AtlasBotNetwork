@@ -13,7 +13,7 @@ namespace SmashggHandler.Modules
         private const string TournamentEndpointUrl = "tournament/";
         private const string UpcomingTournaments = "/public/tournaments/schedule?per_page=5&filter={\"upcoming\"%3Atrue%2C\"videogameIds\"%3A\"\"%2C\"attendeeCount\"%3A[\"gt%3A200%2Clte%3A500\"%2C\"gt%3A500%2Clte%3A1000\"%2C\"gt%3A1000\"%2C\"gt%3A100%2Clte%3A200\"]}&page=1";
 
-        public async Task<TournamentRoot> GetTournamentByName(string name)
+        public async Task<TournamentRoot> GetTournamentByNameAsync(string name)
         {
             var client = new RestClient(Uri);
             var request = new RestRequest($"{TournamentEndpointUrl}{name}?expand[]=event", Method.GET);
@@ -23,7 +23,7 @@ namespace SmashggHandler.Modules
             return JsonConvert.DeserializeObject<TournamentRoot>(response.Content);
         }
 
-        public async Task<TournamentScheduleRoot> GetUpcomingTournaments()
+        public async Task<TournamentScheduleRoot> GetUpcomingTournamentsAsync()
         {
             var client = new RestClient(Uri);
             var request = new RestRequest($"{UpcomingTournaments}", Method.GET);

@@ -12,14 +12,19 @@ namespace ChampionGgApiHandler.Models.Champion
     {
         [JsonProperty("finalitemshashfixed")]
         public HashCategory Items { get; set; }
+        
         [JsonProperty("masterieshash")]
         public HashCategory Masteries { get; set; }
+        
         [JsonProperty("skillorderhash")]
         public HashCategory Skills { get; set; }
+        
         [JsonProperty("summonershash")]
         public HashCategory Summoners { get; set; }
+        
         [JsonProperty("runehash")]
         public HashCategory Runes { get; set; }
+        
         [JsonProperty("firstitemshash")]
         public HashCategory FirstItems { get; set; }
     }
@@ -37,10 +42,13 @@ namespace ChampionGgApiHandler.Models.Champion
     {
         [JsonProperty("count")]
         public int Count { get; set; }
+        
         [JsonProperty("wins")]
         public int Wins { get; set; }
+        
         [JsonProperty("winrate")]
         public double Winrate { get; set; }
+        
         [JsonProperty("hash")]
         public string Hash { get; set; }
     }

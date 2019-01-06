@@ -19,9 +19,10 @@ namespace AtlasBotNode.EmbedGenerators
 
         public DefaultEmbedGenerator GenerateNotFoundEmbed(string module, string command, string title, string message)
         {
-            _embedBuilder.AddField(title, message);
-            _embedBuilder.WithColor(Color.Red);
-            _embedBuilder.WithTitle("Not found");
+            _embedBuilder.AddField(title, message)
+                .WithColor(Color.Red)
+                .WithTitle("Not found");
+            
             return this;
         }
     }

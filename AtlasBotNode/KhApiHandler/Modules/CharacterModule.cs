@@ -7,12 +7,12 @@ namespace KhApiHandler.Modules
 {
     public interface ICharacterModule
     {
-        Task<Character> GetCharacterByName(string name);
+        Task<Character> GetCharacterByNameAsync(string name);
     }
 
     public class CharacterModule : ICharacterModule
     {
-        public async Task<Character> GetCharacterByName(string name)
+        public async Task<Character> GetCharacterByNameAsync(string name)
         {
             var client = new RestClient("http://beta-api-kuroganehammer.azurewebsites.net");
             var request = new RestRequest($"api/characters/name/{name}");

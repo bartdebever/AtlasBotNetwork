@@ -11,7 +11,7 @@
     [Alias("SR")]
     public class SpeedrunModule : ModuleBase
     {
-        private readonly SpeedrunAPIClient _speedrunApiClient;
+        private readonly SpeedrunApiClient _speedrunApiClient;
         private readonly ISpeedrunEmbedGenerator _speedrunEmbedGenerator;
         private readonly IDefaultEmbedGenerator _defaultEmbedGenerator;
 
@@ -19,7 +19,7 @@
         {
             _defaultEmbedGenerator = defaultEmbedGenerator;
             _speedrunEmbedGenerator = speedrunEmbedGenerator;
-            _speedrunApiClient = new SpeedrunAPIClient();
+            _speedrunApiClient = new SpeedrunApiClient();
         }
 
         [Command("leaderboard")]
