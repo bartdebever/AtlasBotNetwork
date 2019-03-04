@@ -18,11 +18,19 @@ namespace AtlasBotNode.Modules.Smash
     {
         private const int MAX_STANDINGS = 3;
 
+        #region Standings
+
         [Command("standings")]
         [Description("Gets the current standings or final results for a tournament.")]
         public async Task GetTournamentStandings(string tournament)
         {
             var tournamentObject = await SmashggClient.Tournament.GetTournamentStandings(tournament);
+
+            if (tournamentObject == null)
+            {
+                await ReplyAsync(string.Empty, embed: TournamentNotFoundEmbed(tournament));
+                return;
+            }
 
             var embedBuilder = new EmbedBuilder();
             embedBuilder.WithTitle(tournamentObject.Name);
@@ -31,11 +39,20 @@ namespace AtlasBotNode.Modules.Smash
 
             if (amountOfStandings > MAX_STANDINGS)
             {
-                await ReplyAsync("Too many results!");
-                return;
-            }
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine("Too many events, please refine your search.");
+                stringBuilder.AppendLine("**Events:**");
+                foreach (var name in tournamentObject.Event.Select(x => x.Name))
+                {
+                    stringBuilder.AppendLine($" -{name}");
+                }
 
-            StandingsEmbedForEvents(tournamentObject.Event, ref embedBuilder);
+                embedBuilder.AddField("Too many events!", stringBuilder.ToString());
+            }
+            else
+            {
+                StandingsEmbedForEvents(tournamentObject.Event, ref embedBuilder);
+            }
 
             await ReplyAsync(string.Empty, embed: embedBuilder.Build());
         }
@@ -45,6 +62,12 @@ namespace AtlasBotNode.Modules.Smash
         public async Task GetTournamentStandings(string eventName, [Remainder] string tournament)
         {
             var tournamentObject = await SmashggClient.Tournament.GetTournamentStandings(tournament);
+
+            if (tournamentObject == null)
+            {
+                await ReplyAsync(string.Empty, embed: TournamentNotFoundEmbed(tournament));
+                return;
+            }
 
             var embedBuilder = new EmbedBuilder();
             embedBuilder.WithTitle(tournamentObject.Name);
@@ -68,6 +91,17 @@ namespace AtlasBotNode.Modules.Smash
 
                 builder.AddField(smashEvent.Name, stringBuilder.ToString(), true);
             }
+        }
+
+        #endregion
+
+        private static Embed TournamentNotFoundEmbed(string tournamentName)
+        {
+            var builder = new EmbedBuilder();
+            builder.WithColor(Color.Red);
+            builder.WithTitle("Error.");
+            builder.AddField("Not found!", $"No tournament found with the name `{tournamentName}`.");
+            return builder.Build();
         }
     }
 }
