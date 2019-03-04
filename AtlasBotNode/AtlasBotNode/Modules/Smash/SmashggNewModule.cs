@@ -51,8 +51,7 @@ namespace AtlasBotNode.Modules.Smash
         [Command("standings")]
         public async Task GetTournamentStandings(string eventName, [Remainder] string tournament)
         {
-            var client = new SmashggNewClient();
-            var tournamentObject = await client.Tournament.GetTournamentStandings(tournament);
+            var tournamentObject = await SmashggClient.Tournament.GetTournamentStandings(tournament);
 
             var embedBuilder = new EmbedBuilder();
             embedBuilder.WithTitle(tournamentObject.Name);
