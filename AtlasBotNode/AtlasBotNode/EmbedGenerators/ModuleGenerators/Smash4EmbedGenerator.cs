@@ -16,7 +16,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 .WithUrl(character.FullUrl)
                 .WithImageUrl(character.MainImageUrl)
                 .WithThumbnailUrl(character.ThumbnailUrl);
-            
+
             if (!string.IsNullOrEmpty(character.Description))
             {
                 _embedBuilder.AddField("Description", character.Description);

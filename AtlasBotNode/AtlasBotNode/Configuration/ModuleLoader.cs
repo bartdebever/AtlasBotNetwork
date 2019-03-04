@@ -9,8 +9,6 @@ namespace AtlasBotNode.Configuration
     using Modules.League;
     using Modules.Roles;
     using Modules.Smash;
-    using Modules.Speedrun;
-    using Modules.YouTube;
 
     /// <summary>
     /// A helper class to load all the modules needed for this node.
@@ -28,13 +26,10 @@ namespace AtlasBotNode.Configuration
             {
                 { "League", typeof(LeagueModule) },
                 { "Help", typeof(HelpModule) },
-                { "Quiz", typeof(QuizModule) },
                 { "Role", typeof(RoleModule) },
                 { "Smash4", typeof(Smash4Module) },
                 { "Smashgg", typeof(SmashggModule) },
-                { "Speedrun", typeof(SpeedrunModule) },
                 { "Test", typeof(TestModule) },
-                { "YouTube", typeof(YoutubeModule) },
                 { "ssg", typeof(SmashggNewModule) }
             };
         }

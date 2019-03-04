@@ -40,7 +40,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 stringBuilder.AppendLine("**Win-Rate**")
                     .AppendLine($"**Best:** {statistic.WinRate.Best.ChampionId.ToEmoji()} {statistic.WinRate.Best.Score.ToPercentage()}")
                     .AppendLine($"**Worst:** {statistic.WinRate.Worst.ChampionId.ToEmoji()} {statistic.WinRate.Worst.Score.ToPercentage()}")
-    
+
                     .AppendLine("**Over-all Performance**")
                     .AppendLine($"**Best:** {statistic.PerformanceScore.Best.ChampionId.ToEmoji()} {statistic.PerformanceScore.Best.Score.ToChampionGgScore()}")
                     .AppendLine($"**Worst:** {statistic.PerformanceScore.Worst.ChampionId.ToEmoji()} {statistic.PerformanceScore.Worst.Score.ToChampionGgScore()}");
@@ -60,7 +60,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 
             var spellStringBuilder = new StringBuilder();
             _embedBuilder.AddField("Passive", $"**{champion.Passive.Name}**\n{champion.Passive.Description.Replace("<br>", "\n")}");
-            
+
             var keys = new []{"Q", "W", "E", "R"};
             for (var i = 0; i < 4; i++)
             {
@@ -150,11 +150,11 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             }
 
             var mostUsed = hash.MostUsed;
-            
+
             var stringBuilder = new StringBuilder()
                 .AppendLine($"Wins: {mostUsed.Wins}")
                 .AppendLine($"Total Used: {mostUsed.Count}");
-            
+
             var hashStringBuilder = new StringBuilder();
             var ids = mostUsed.Hash.Split('-');
             if (useEmoji)

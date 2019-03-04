@@ -17,7 +17,7 @@ namespace KhApiHandler.Modules
             var client = new RestClient("http://beta-api-kuroganehammer.azurewebsites.net");
             var request = new RestRequest($"api/characters/name/{name}");
             var response = await client.ExecuteTaskAsync(request);
-            
+
             return JsonConvert.DeserializeObject<Character>(response.Content);
         }
     }
