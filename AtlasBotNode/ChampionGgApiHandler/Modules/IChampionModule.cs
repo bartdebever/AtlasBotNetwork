@@ -4,13 +4,14 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChampionGgApiHandler.Modules
 {
     public interface IChampionModule
     {
-        Task<ChampionData> GetChampionStats(int championId);
+        Task<ChampionData> GetChampionStatsAsync(int championId);
     }
 
     public class ChampionModule : IChampionModule
@@ -22,7 +23,7 @@ namespace ChampionGgApiHandler.Modules
             _baseUri = uri;
         }
 
-        public async Task<ChampionData> GetChampionStats(int championId)
+        public async Task<ChampionData> GetChampionStatsAsync(int championId)
         {
             var client = new RestClient(_baseUri);
             var request = new RestRequest($"champions/{championId}?limit=1&champData=kda,damage,positions,finalitems,hashes&api_key={KeyStorage.ApiKey}");
@@ -33,7 +34,7 @@ namespace ChampionGgApiHandler.Modules
                 throw new ServiceNotAvailableException();
             }
 
-            return JsonConvert.DeserializeObject<List<ChampionData>>(response.Content)[0];
+            return JsonConvert.DeserializeObject<List<ChampionData>>(response.Content).FirstOrDefault();
         }
     }
 }

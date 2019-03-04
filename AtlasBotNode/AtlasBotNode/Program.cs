@@ -114,9 +114,9 @@ namespace AtlasBotNode
         private static void SetApiKeys(KeyConfiguration config)
         {
             KeyStorage.ApiKey = config.Championgg;
-            SpeedrunAPIClient.ApiKey = config.Speedrun;
-            YoutubeRequester.ApiKey = config.YouTube;
-            SmashggNewClient.ApiToken = config.Smashgg;
+            SpeedrunApiClient.ApiKey = config.Speedrun;
+            YoutubeClient.ApiKey = config.YouTube;
+            SmashggClient.ApiToken = config.Smashgg;
         }
 
         /// <summary>

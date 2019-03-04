@@ -1,4 +1,5 @@
 ﻿using SmashggNet.Helpers;
+using SmashggNet.Modules.Interfaces;
 
 namespace SmashggNet.Modules
 {
@@ -7,8 +8,9 @@ namespace SmashggNet.Modules
     using GraphQL.Common.Request;
     using Models;
 
-    public class TournamentModule
+    public class TournamentModule : ITournamentModule
     {
+        /// <inheritdoc />
         public async Task<Tournament> GetTournamentStandings(string tournament)
         {
             var request = new GraphQLRequest
@@ -18,15 +20,22 @@ namespace SmashggNet.Modules
                                   OperationName = "TournamentQuery",
                                   Variables = new { slug = tournament }
                               };
+            
             using (var graphQlClient = new GraphQLClient(SmashggConstants.BaseUrl))
             {
                 graphQlClient.DefaultRequestHeaders.Add(
                     "Authorization",
-                    $"Bearer {SmashggNewClient.ApiToken}");
+                    $"Bearer {SmashggClient.ApiToken}");
 
-                var graphQlResponse = await graphQlClient.PostAsync(request);
-
-                return graphQlResponse.GetDataFieldAs<Tournament>("tournament");
+                try
+                {
+                    var graphQlResponse = await graphQlClient.PostAsync(request);
+                    return graphQlResponse.GetDataFieldAs<Tournament>("tournament");
+                }
+                catch
+                {
+                    return null;
+                }                
             }
         }
     }

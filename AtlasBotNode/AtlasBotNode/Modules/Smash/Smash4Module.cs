@@ -22,7 +22,7 @@
         [Alias("c")]
         public async Task GetCharacterByName([Remainder] string characterName)
         {
-            var character = await _apiClient.Characters.GetCharacterByName(characterName);
+            var character = await _apiClient.Characters.GetCharacterByNameAsync(characterName);
             var response = _smash4EmbedGenerator.CreateCharacterEmbed(character).Build();
             await ReplyAsync(string.Empty, embed: response);
         }

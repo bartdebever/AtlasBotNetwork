@@ -31,7 +31,11 @@ namespace ChampionGgApiHandler.Models.Champion
         [JsonProperty("assists")]
         public double Assists { get; set; }
 
-        public double Kda => Kills + Assists / Deaths;
+        /// <summary>
+        /// Gets the KDA for this champion.
+        /// KDA is calculated by doing (<see cref="Kills"/> + <see cref="Assists"/>) / <see cref="Deaths"/>.
+        /// </summary>
+        public double Kda => (Kills + Assists) / Deaths;
 
         [JsonProperty("gamesPlayed")]
         public int GamesPlayed { get; set; }

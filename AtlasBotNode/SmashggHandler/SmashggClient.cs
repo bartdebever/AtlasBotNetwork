@@ -7,6 +7,9 @@ namespace SmashggHandler
     {
         public ITournamentEndpoint TournamentEndpoint { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmashggClient"/> class.
+        /// </summary>
         public SmashggClient()
         {
             TournamentEndpoint = new TournamentEndpoint();

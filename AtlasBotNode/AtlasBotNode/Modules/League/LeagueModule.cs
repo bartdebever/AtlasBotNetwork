@@ -28,7 +28,7 @@
         [Summary("Gets the latest best and worst performance for every lane from Champion.gg")]
         public async Task GetPerformance([Optional] string division)
         {
-            var performance = await _championGgClient.Performance.GetDefaultPerformance();
+            var performance = await _championGgClient.Performance.GetDefaultPerformanceAsync();
             if (performance == null)
             {
                 await ReplyAsync("Unable to get performance");
@@ -65,7 +65,7 @@
         [Command("stats")]
         public async Task GetStats(int championId)
         {
-            var championData = await _championGgClient.Champions.GetChampionStats(championId);
+            var championData = await _championGgClient.Champions.GetChampionStatsAsync(championId);
             if (championData == null)
             {
                 await ReplyAsync("Unable to get that champion");
@@ -79,7 +79,7 @@
         public async Task GetChampionBuild([Remainder] string champion)
         {
             var championDto = LoLChampionHelper.GetChampionByName(champion);
-            var championData = await _championGgClient.Champions.GetChampionStats(championDto.Id);
+            var championData = await _championGgClient.Champions.GetChampionStatsAsync(championDto.Id);
             if (championData == null)
             {
                 await ReplyAsync("Unable to get that champion");

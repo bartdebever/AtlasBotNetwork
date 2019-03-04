@@ -18,7 +18,7 @@ namespace SpeedrunAPIHandler.Modules
         {
             var client = new RestClient(new Uri("http://speedrun.com"));
             var request = new RestRequest($"api/v1/leaderboards/{game}/category/{category}?embed=players,game,category&top={players}", Method.GET);
-            request.AddHeader("X-API-Key", SpeedrunAPIClient.ApiKey);
+            request.AddHeader("X-API-Key", SpeedrunApiClient.ApiKey);
 
             var response = await client.ExecuteTaskAsync(request);
             var root = JsonConvert.DeserializeObject<RootLeaderboard>(response.Content);
