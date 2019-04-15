@@ -4,7 +4,6 @@ namespace SpeedrunAPIHandler.Models
 {
     public class Image
     {
-        [JsonProperty("uri")]
-        public string Uri { get; set; }
+        [JsonProperty("uri")] public string Uri { get; set; }
     }
 }

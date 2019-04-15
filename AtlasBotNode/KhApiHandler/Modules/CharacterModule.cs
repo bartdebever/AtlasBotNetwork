@@ -1,7 +1,7 @@
-﻿using KhApiHandler.Models;
+﻿using System.Threading.Tasks;
+using KhApiHandler.Models;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Threading.Tasks;
 
 namespace KhApiHandler.Modules
 {

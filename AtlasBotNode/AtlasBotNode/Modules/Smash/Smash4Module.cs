@@ -1,10 +1,10 @@
-﻿namespace AtlasBotNode.Modules.Smash
-{
-    using System.Threading.Tasks;
-    using Discord.Commands;
-    using EmbedGenerators.ModuleGenerators.Interfaces;
-    using KhApiHandler;
+﻿using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using Discord.Commands;
+using KhApiHandler;
 
+namespace AtlasBotNode.Modules.Smash
+{
     [Group("smash4")]
     [Alias("SB4", "S4")]
     public class Smash4Module : ModuleBase

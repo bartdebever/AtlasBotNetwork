@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RestSharp;
 using SmashggHandler.Exceptions;
 using SmashggHandler.Models;
 using SmashggHandler.Modules.Interfaces;
-using System.Threading.Tasks;
 
 namespace SmashggHandler.Modules
 {
@@ -11,7 +11,9 @@ namespace SmashggHandler.Modules
     {
         private const string Uri = "http://api.smash.gg/";
         private const string TournamentEndpointUrl = "tournament/";
-        private const string UpcomingTournaments = "/public/tournaments/schedule?per_page=5&filter={\"upcoming\"%3Atrue%2C\"videogameIds\"%3A\"\"%2C\"attendeeCount\"%3A[\"gt%3A200%2Clte%3A500\"%2C\"gt%3A500%2Clte%3A1000\"%2C\"gt%3A1000\"%2C\"gt%3A100%2Clte%3A200\"]}&page=1";
+
+        private const string UpcomingTournaments =
+            "/public/tournaments/schedule?per_page=5&filter={\"upcoming\"%3Atrue%2C\"videogameIds\"%3A\"\"%2C\"attendeeCount\"%3A[\"gt%3A200%2Clte%3A500\"%2C\"gt%3A500%2Clte%3A1000\"%2C\"gt%3A1000\"%2C\"gt%3A100%2Clte%3A200\"]}&page=1";
 
         public async Task<TournamentRoot> GetTournamentByNameAsync(string name)
         {

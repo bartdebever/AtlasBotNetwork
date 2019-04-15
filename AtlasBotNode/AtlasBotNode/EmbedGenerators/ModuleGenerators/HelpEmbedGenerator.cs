@@ -1,8 +1,8 @@
-﻿using Discord;
-using Discord.Commands;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using Discord;
+using Discord.Commands;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
@@ -12,7 +12,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         private readonly EmbedBuilder _embedBuilder;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HelpEmbedGenerator"/> class.
+        ///     Initializes a new instance of the <see cref="HelpEmbedGenerator" /> class.
         /// </summary>
         public HelpEmbedGenerator()
         {
@@ -38,15 +38,12 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 foreach (var command in module.Commands)
                 {
                     stringBuilder.Append($"**-{module.Name} {command.Name}**");
-                    foreach (var parameter in command.Parameters)
-                    {
-                        stringBuilder.Append($" *{parameter.Name}*");
-                    }
-                    
+                    foreach (var parameter in command.Parameters) stringBuilder.Append($" *{parameter.Name}*");
+
                     stringBuilder.Append($": {command.Summary}\n");
                 }
-                
-                _embedBuilder.AddInlineField(module.Name, stringBuilder.ToString());
+
+                _embedBuilder.AddField(module.Name, stringBuilder.ToString(), true);
             }
 
             return this;

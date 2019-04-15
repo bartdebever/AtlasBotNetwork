@@ -1,8 +1,7 @@
-﻿using AtlasBotNode.Helpers;
-using Discord;
-using System;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using AtlasBotNode.Helpers;
+using Discord;
 
 namespace AtlasBotNode.Loggers
 {
@@ -32,7 +31,8 @@ namespace AtlasBotNode.Loggers
                     break;
             }
 
-            Console.WriteLine($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}");
+            Console.WriteLine(
+                $"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}");
             Console.ResetColor();
         }
 

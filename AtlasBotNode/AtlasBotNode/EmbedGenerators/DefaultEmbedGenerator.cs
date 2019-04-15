@@ -1,5 +1,4 @@
-﻿using AtlasBotNode.Loggers;
-using Discord;
+﻿using Discord;
 
 namespace AtlasBotNode.EmbedGenerators
 {
@@ -22,7 +21,7 @@ namespace AtlasBotNode.EmbedGenerators
             _embedBuilder.AddField(title, message)
                 .WithColor(Color.Red)
                 .WithTitle("Not found");
-            
+
             return this;
         }
     }

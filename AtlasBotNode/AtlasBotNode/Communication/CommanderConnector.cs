@@ -1,15 +1,21 @@
-﻿namespace AtlasBotNode.Communication
+﻿using System;
+using System.IO;
+using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
+using Discord;
+
+namespace AtlasBotNode.Communication
 {
-    using System;
-    using System.IO;
-    using System.Net.Sockets;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Threading.Tasks;
-    using Discord;
-    using LogMessage = AtlasModels.Logging.LogMessage;
-    
     public class CommanderConnector
     {
+        private readonly string _ip;
+
+        private readonly string _nodeName;
+        private readonly int _port;
+        private readonly string _token;
+        private Socket _workSocket;
+
         public CommanderConnector(string ip, int port, string nodeName, string token)
         {
             _ip = ip;
@@ -17,12 +23,6 @@
             _nodeName = nodeName;
             _token = token;
         }
-
-        private readonly string _nodeName;
-        private readonly string _token;
-        private readonly string _ip;
-        private readonly int _port;
-        private Socket _workSocket;
 
         public void Connect()
         {
@@ -33,15 +33,15 @@
 
         public void Register()
         {
-            SendLogMessage(new LogMessage(_nodeName, null, _token, 0, 0));
-
+            SendLogMessage(new AtlasModels.Logging.LogMessage(_nodeName, null, _token, 0, 0));
         }
+
         public void LogMessage(string module, string message, int level)
         {
-            SendLogMessage(new LogMessage(_nodeName, module, message, level, 1));
+            SendLogMessage(new AtlasModels.Logging.LogMessage(_nodeName, module, message, level, 1));
         }
 
-        public Task LogDiscord(Discord.LogMessage logMessage)
+        public Task LogDiscord(LogMessage logMessage)
         {
             var level = 0;
             switch (logMessage.Severity)
@@ -54,12 +54,13 @@
                     level = 1;
                     break;
             }
-            var message = new LogMessage(_nodeName, null, logMessage.Message, level, 1);
+
+            var message = new AtlasModels.Logging.LogMessage(_nodeName, null, logMessage.Message, level, 1);
             SendLogMessage(message);
             return Task.CompletedTask;
         }
 
-        private void SendLogMessage(LogMessage logMessage)
+        private void SendLogMessage(AtlasModels.Logging.LogMessage logMessage)
         {
             byte[] messageInBytes;
             using (var memoryStream = new MemoryStream())
@@ -68,6 +69,7 @@
                 formatter.Serialize(memoryStream, logMessage);
                 messageInBytes = memoryStream.ToArray();
             }
+
             _workSocket.Send(messageInBytes);
         }
     }

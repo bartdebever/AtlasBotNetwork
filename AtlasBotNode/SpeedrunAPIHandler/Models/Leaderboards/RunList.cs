@@ -5,10 +5,8 @@ namespace SpeedrunAPIHandler.Models.Leaderboards
 {
     public class RunList
     {
-        [JsonProperty("place")]
-        public int Place { get; set; }
+        [JsonProperty("place")] public int Place { get; set; }
 
-        [JsonProperty("run")]
-        public Run Run { get; set; }
+        [JsonProperty("run")] public Run Run { get; set; }
     }
 }

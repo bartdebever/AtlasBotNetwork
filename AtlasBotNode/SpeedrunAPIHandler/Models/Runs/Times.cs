@@ -4,7 +4,6 @@ namespace SpeedrunAPIHandler.Models.Runs
 {
     public class Times
     {
-        [JsonProperty("primary")]
-        public string Primary { get; set; }
+        [JsonProperty("primary")] public string Primary { get; set; }
     }
 }

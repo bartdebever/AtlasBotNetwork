@@ -1,10 +1,9 @@
-﻿using AtlasBotNode.Helpers;
-using Discord;
-using SpeedrunAPIHandler.Models;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using AtlasBotNode.Helpers;
+using Discord;
 using SpeedrunAPIHandler.Models.Leaderboards;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
@@ -13,35 +12,26 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
     {
         private EmbedBuilder _embedBuilder;
 
-        private void ResetEmbedBuilder()
-        {
-            _embedBuilder = new EmbedBuilder()
-                .WithColor(Color.Red)
-                .WithCurrentTimestamp()
-                .WithFooter("Speedrun.com API");
-        }
-
         public ISpeedrunEmbedGenerator CreateLeaderboardEmbed(Leaderboard leaderboard)
         {
             ResetEmbedBuilder();
 
-            _embedBuilder.WithTitle($"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} Leaderboard");
+            _embedBuilder.WithTitle(
+                $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} Leaderboard");
             _embedBuilder.WithUrl(leaderboard.WebLink);
             var stringBuilder = new StringBuilder();
             foreach (var run in leaderboard.RunList)
             {
                 var player = leaderboard.Players.FirstOrDefault(x => x.Id == run.Run.Players[0]?.Id);
-                stringBuilder.AppendLine($"**{StringCleanerHelper.NumberToRanking(run.Place)}**: {player?.Names["international"]}" +
-                                         $" {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}");
+                stringBuilder.AppendLine(
+                    $"**{StringCleanerHelper.NumberToRanking(run.Place)}**: {player?.Names["international"]}" +
+                    $" {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}");
             }
-            
+
             _embedBuilder.AddField("Runs", stringBuilder);
 
             var icon = leaderboard.Game.Assets["icon"];
-            if (icon != null)
-            {
-                _embedBuilder.WithThumbnailUrl(icon.Uri);
-            }
+            if (icon != null) _embedBuilder.WithThumbnailUrl(icon.Uri);
 
             return this;
         }
@@ -52,14 +42,10 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 
             var run = leaderboard.RunList[0];
             var runner = leaderboard.Players.FirstOrDefault(x => x.Id == run.Run.Players[0].Id);
-            if (run == null || runner == null)
-            {
-                //TODO rework.
-                throw new Exception();
-            }
+            if (run == null || runner == null) throw new Exception();
 
             _embedBuilder.WithTitle(
-                $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} World Record")
+                    $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} World Record")
                 .WithUrl(leaderboard.WebLink)
                 .AddField("World Record",
                     $"**{runner.Names["international"]}:** {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}\n" +
@@ -67,14 +53,10 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 );
 
             if (leaderboard.Game.Assets.ContainsKey("cover-medium"))
-            {
                 _embedBuilder.WithThumbnailUrl(leaderboard.Game.Assets["cover-medium"].Uri);
-            }
 
             if (leaderboard.Game.Assets.ContainsKey("icon"))
-            {
                 _embedBuilder.WithImageUrl(leaderboard.Game.Assets["icon"].Uri);
-            }
 
             return this;
         }
@@ -82,6 +64,14 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         public Embed Build()
         {
             return _embedBuilder.Build();
+        }
+
+        private void ResetEmbedBuilder()
+        {
+            _embedBuilder = new EmbedBuilder()
+                .WithColor(Color.Red)
+                .WithCurrentTimestamp()
+                .WithFooter("Speedrun.com API");
         }
     }
 }

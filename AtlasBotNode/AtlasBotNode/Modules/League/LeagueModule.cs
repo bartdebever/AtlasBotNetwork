@@ -1,20 +1,20 @@
-﻿namespace AtlasBotNode.Modules.League
-{
-    using System.Runtime.InteropServices;
-    using System.Threading.Tasks;
-    using ChampionGgApiHandler;
-    using Discord.Commands;
-    using EmbedGenerators.ModuleGenerators.Interfaces;
-    using Helpers;
-    using LoLHandler;
+﻿using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using AtlasBotNode.Helpers;
+using ChampionGgApiHandler;
+using Discord.Commands;
+using LoLHandler;
 
+namespace AtlasBotNode.Modules.League
+{
     [Group("lol")]
     [Alias("league")]
     public class LeagueModule : ModuleBase
     {
         private readonly ChampionGgClient _championGgClient;
-        private readonly LoLClient _lolClient;
         private readonly ILeagueEmbedGenerator _leagueEmbedGenerator;
+        private readonly LoLClient _lolClient;
 
         public LeagueModule(ILeagueEmbedGenerator leagueEmbedGenerator)
         {
@@ -29,10 +29,7 @@
         public async Task GetPerformance([Optional] string division)
         {
             var performance = await _championGgClient.Performance.GetDefaultPerformanceAsync();
-            if (performance == null)
-            {
-                await ReplyAsync("Unable to get performance");
-            }
+            if (performance == null) await ReplyAsync("Unable to get performance");
 
             var response = _leagueEmbedGenerator.CreatePerformanceEmbed(performance).Build();
             await ReplyAsync(string.Empty, embed: response);
@@ -66,10 +63,7 @@
         public async Task GetStats(int championId)
         {
             var championData = await _championGgClient.Champions.GetChampionStatsAsync(championId);
-            if (championData == null)
-            {
-                await ReplyAsync("Unable to get that champion");
-            }
+            if (championData == null) await ReplyAsync("Unable to get that champion");
 
             var response = _leagueEmbedGenerator.CreateChampionDataEmbed(championData).Build();
             await ReplyAsync(string.Empty, embed: response);
@@ -80,10 +74,7 @@
         {
             var championDto = LoLChampionHelper.GetChampionByName(champion);
             var championData = await _championGgClient.Champions.GetChampionStatsAsync(championDto.Id);
-            if (championData == null)
-            {
-                await ReplyAsync("Unable to get that champion");
-            }
+            if (championData == null) await ReplyAsync("Unable to get that champion");
 
             var response = _leagueEmbedGenerator.CreateChampionBuildEmbed(championData, championDto).Build();
             await ReplyAsync(string.Empty, embed: response);

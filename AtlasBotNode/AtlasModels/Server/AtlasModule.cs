@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AtlasModels.Server
+﻿namespace AtlasModels.Server
 {
     public enum AtlasModule
     {

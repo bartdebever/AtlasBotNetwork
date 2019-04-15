@@ -1,9 +1,6 @@
-﻿using Discord.Commands;
+﻿using System;
+using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.Threading.Tasks;
-
-using Discord;
 
 namespace AtlasBotNode.Helpers
 {

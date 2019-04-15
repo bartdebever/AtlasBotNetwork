@@ -1,25 +1,16 @@
-﻿using System.Globalization;
+﻿using System.Text;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
 using AtlasBotNode.Helpers;
 using ChampionGgApiHandler.Models.Champion;
 using ChampionGgApiHandler.Models.Performance;
 using Discord;
-using System.Text;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
-using RestSharp.Extensions;
+using ChampionDto = LoLHandler.Dtos.ChampionDto;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
     public class LeagueEmbedGenerator : ILeagueEmbedGenerator
     {
         private EmbedBuilder _embedBuilder;
-
-        private void ResetBuilder()
-        {
-            _embedBuilder = new EmbedBuilder()
-                .WithColor(Color.DarkBlue)
-                .WithCurrentTimestamp()
-                .WithFooter("League of Legends Module");
-        }
 
         public Embed Build()
         {
@@ -38,20 +29,24 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 var stringBuilder = new StringBuilder();
 
                 stringBuilder.AppendLine("**Win-Rate**")
-                    .AppendLine($"**Best:** {statistic.WinRate.Best.ChampionId.ToEmoji()} {statistic.WinRate.Best.Score.ToPercentage()}")
-                    .AppendLine($"**Worst:** {statistic.WinRate.Worst.ChampionId.ToEmoji()} {statistic.WinRate.Worst.Score.ToPercentage()}")
-
+                    .AppendLine(
+                        $"**Best:** {statistic.WinRate.Best.ChampionId.ToEmoji()} {statistic.WinRate.Best.Score.ToPercentage()}")
+                    .AppendLine(
+                        $"**Worst:** {statistic.WinRate.Worst.ChampionId.ToEmoji()} {statistic.WinRate.Worst.Score.ToPercentage()}")
                     .AppendLine("**Over-all Performance**")
-                    .AppendLine($"**Best:** {statistic.PerformanceScore.Best.ChampionId.ToEmoji()} {statistic.PerformanceScore.Best.Score.ToChampionGgScore()}")
-                    .AppendLine($"**Worst:** {statistic.PerformanceScore.Worst.ChampionId.ToEmoji()} {statistic.PerformanceScore.Worst.Score.ToChampionGgScore()}");
+                    .AppendLine(
+                        $"**Best:** {statistic.PerformanceScore.Best.ChampionId.ToEmoji()} {statistic.PerformanceScore.Best.Score.ToChampionGgScore()}")
+                    .AppendLine(
+                        $"**Worst:** {statistic.PerformanceScore.Worst.ChampionId.ToEmoji()} {statistic.PerformanceScore.Worst.Score.ToChampionGgScore()}");
 
-                _embedBuilder.AddField(StringCleanerHelper.ChampionGgRoleName(roleStatistic.Key), stringBuilder.ToString(), true);
+                _embedBuilder.AddField(StringCleanerHelper.ChampionGgRoleName(roleStatistic.Key),
+                    stringBuilder.ToString(), true);
             }
 
             return this;
         }
 
-        public ILeagueEmbedGenerator CreateChampionSpellsEmbed(LoLHandler.Dtos.ChampionDto champion, ChampionDto championDto)
+        public ILeagueEmbedGenerator CreateChampionSpellsEmbed(ChampionDto champion, Helpers.ChampionDto championDto)
         {
             ResetBuilder();
 
@@ -59,9 +54,10 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 $"http://ddragon.leagueoflegends.com/cdn/8.19.1/img/champion/{championDto.InternalName}.png");
 
             var spellStringBuilder = new StringBuilder();
-            _embedBuilder.AddField("Passive", $"**{champion.Passive.Name}**\n{champion.Passive.Description.Replace("<br>", "\n")}");
+            _embedBuilder.AddField("Passive",
+                $"**{champion.Passive.Name}**\n{champion.Passive.Description.Replace("<br>", "\n")}");
 
-            var keys = new []{"Q", "W", "E", "R"};
+            var keys = new[] {"Q", "W", "E", "R"};
             for (var i = 0; i < 4; i++)
             {
                 var spell = champion.Spells[i];
@@ -69,9 +65,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 spellStringBuilder.AppendLine($"**{spell.Name}**");
                 spellStringBuilder.AppendLine($"{spell.Description}");
                 if (!string.IsNullOrWhiteSpace(spell.CooldownBurn) || spell.CooldownBurn.Equals("0"))
-                {
                     spellStringBuilder.AppendLine($"**Cooldown:** {spell.CooldownBurn}");
-                }
 
                 _embedBuilder.AddField(keys[i], spellStringBuilder.ToString());
             }
@@ -79,7 +73,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             return this;
         }
 
-        public ILeagueEmbedGenerator CreateChampionEmbed(LoLHandler.Dtos.ChampionDto champion, string internalName)
+        public ILeagueEmbedGenerator CreateChampionEmbed(ChampionDto champion, string internalName)
         {
             ResetBuilder();
             _embedBuilder
@@ -99,34 +93,48 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"**Pick Rate:** {championData.PickRate.ToPercentage()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.PickRates)})")
-                .AppendLine($"**Win Rate:** {championData.WinRate.ToPercentage()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.WinRates)})")
-                .AppendLine($"**Ban Rate:** {championData.BanRate.ToPercentage()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.BanRates)})");
+            stringBuilder
+                .AppendLine(
+                    $"**Pick Rate:** {championData.PickRate.ToPercentage()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.PickRates)})")
+                .AppendLine(
+                    $"**Win Rate:** {championData.WinRate.ToPercentage()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.WinRates)})")
+                .AppendLine(
+                    $"**Ban Rate:** {championData.BanRate.ToPercentage()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.BanRates)})");
 
             _embedBuilder.AddField("Picks/Bans", stringBuilder.ToString());
 
             stringBuilder.Clear();
 
-            stringBuilder.AppendLine($"**Kills:** {championData.Kills.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.Kills)})")
-                .AppendLine($"**Deaths:** {championData.Deaths.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.Deaths)})")
-                .AppendLine($"**Assists:** {championData.Assists.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.Assists)})")
+            stringBuilder
+                .AppendLine(
+                    $"**Kills:** {championData.Kills.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.Kills)})")
+                .AppendLine(
+                    $"**Deaths:** {championData.Deaths.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.Deaths)})")
+                .AppendLine(
+                    $"**Assists:** {championData.Assists.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.Assists)})")
                 .AppendLine($"**KDA:** {championData.Kda.ToChampionGgScore()}");
 
             _embedBuilder.AddField("KDA", stringBuilder.ToString());
 
             stringBuilder.Clear();
 
-            stringBuilder.AppendLine($"**Damage done:** {championData.Damage.Total.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.DamageDealt)})")
-                .AppendLine($"**True Damage:** {championData.Damage.TotalTrue.ToChampionGgScore()} ({championData.Damage.PercentageTrue.ToPercentage()})")
-                .AppendLine($"**Magic Damage:** {championData.Damage.TotalMagic.ToChampionGgScore()} ({championData.Damage.PercentageMagic.ToPercentage()})")
-                .AppendLine($"**Physical Damage:** {championData.Damage.TotalPhysical.ToChampionGgScore()} ({championData.Damage.PercentagePhysical.ToPercentage()})");
+            stringBuilder
+                .AppendLine(
+                    $"**Damage done:** {championData.Damage.Total.ToChampionGgScore()} ({StringCleanerHelper.NumberToRanking(championData.Rankings.DamageDealt)})")
+                .AppendLine(
+                    $"**True Damage:** {championData.Damage.TotalTrue.ToChampionGgScore()} ({championData.Damage.PercentageTrue.ToPercentage()})")
+                .AppendLine(
+                    $"**Magic Damage:** {championData.Damage.TotalMagic.ToChampionGgScore()} ({championData.Damage.PercentageMagic.ToPercentage()})")
+                .AppendLine(
+                    $"**Physical Damage:** {championData.Damage.TotalPhysical.ToChampionGgScore()} ({championData.Damage.PercentagePhysical.ToPercentage()})");
 
             _embedBuilder.AddField("Damage", stringBuilder.ToString());
 
             return this;
         }
 
-        public ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData, ChampionDto championDto)
+        public ILeagueEmbedGenerator CreateChampionBuildEmbed(ChampionData championData,
+            Helpers.ChampionDto championDto)
         {
             ResetBuilder();
 
@@ -138,16 +146,22 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             CreateFieldForHash(championData.Hashes.Runes, "Runes", true);
             CreateFieldForHash(championData.Hashes.Summoners, "Summoners", true);
 
-            _embedBuilder.WithThumbnailUrl($"http://ddragon.leagueoflegends.com/cdn/8.19.1/img/champion/{championDto.InternalName}.png");
+            _embedBuilder.WithThumbnailUrl(
+                $"http://ddragon.leagueoflegends.com/cdn/8.19.1/img/champion/{championDto.InternalName}.png");
             return this;
+        }
+
+        private void ResetBuilder()
+        {
+            _embedBuilder = new EmbedBuilder()
+                .WithColor(Color.DarkBlue)
+                .WithCurrentTimestamp()
+                .WithFooter("League of Legends Module");
         }
 
         private void CreateFieldForHash(HashCategory hash, string title, bool useEmoji = false)
         {
-            if (hash == null)
-            {
-                return;
-            }
+            if (hash == null) return;
 
             var mostUsed = hash.MostUsed;
 
@@ -158,23 +172,14 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
             var hashStringBuilder = new StringBuilder();
             var ids = mostUsed.Hash.Split('-');
             if (useEmoji)
-            {
                 foreach (var id in ids)
-                {
                     hashStringBuilder.Append($"{EmojiHelper.GetEmoji(id)} ");
-                }
-            }
             else
-            {
                 foreach (var id in ids)
-                {
                     hashStringBuilder.Append($"{id} ");
-                }
-            }
 
             stringBuilder.AppendLine(hashStringBuilder.ToString());
             _embedBuilder.AddField(title, stringBuilder.ToString());
-
         }
     }
 }

@@ -4,7 +4,6 @@ namespace SpeedrunAPIHandler.Models.Leaderboards
 {
     public class RootLeaderboard
     {
-        [JsonProperty("data")]
-        public Leaderboard Leaderboard { get; set; }
+        [JsonProperty("data")] public Leaderboard Leaderboard { get; set; }
     }
 }

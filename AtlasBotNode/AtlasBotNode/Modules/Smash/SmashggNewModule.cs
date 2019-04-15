@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Discord;
 using Discord.Commands;
-
 using SmashggNet;
 using SmashggNet.Models;
 
@@ -17,6 +14,15 @@ namespace AtlasBotNode.Modules.Smash
     public class SmashggNewModule : ModuleBase
     {
         private const int MAX_STANDINGS = 3;
+
+        private static Embed TournamentNotFoundEmbed(string tournamentName)
+        {
+            var builder = new EmbedBuilder();
+            builder.WithColor(Color.Red);
+            builder.WithTitle("Error.");
+            builder.AddField("Not found!", $"No tournament found with the name `{tournamentName}`.");
+            return builder.Build();
+        }
 
         #region Standings
 
@@ -42,10 +48,7 @@ namespace AtlasBotNode.Modules.Smash
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine("Too many events, please refine your search.");
                 stringBuilder.AppendLine("**Events:**");
-                foreach (var name in tournamentObject.Event.Select(x => x.Name))
-                {
-                    stringBuilder.AppendLine($" -{name}");
-                }
+                foreach (var name in tournamentObject.Event.Select(x => x.Name)) stringBuilder.AppendLine($" -{name}");
 
                 embedBuilder.AddField("Too many events!", stringBuilder.ToString());
             }
@@ -85,23 +88,12 @@ namespace AtlasBotNode.Modules.Smash
             {
                 var stringBuilder = new StringBuilder();
                 foreach (var standing in smashEvent.Standings)
-                {
                     stringBuilder.AppendLine($"{standing.Ranking}: **{standing.Entrant.Name}**");
-                }
 
                 builder.AddField(smashEvent.Name, stringBuilder.ToString(), true);
             }
         }
 
         #endregion
-
-        private static Embed TournamentNotFoundEmbed(string tournamentName)
-        {
-            var builder = new EmbedBuilder();
-            builder.WithColor(Color.Red);
-            builder.WithTitle("Error.");
-            builder.AddField("Not found!", $"No tournament found with the name `{tournamentName}`.");
-            return builder.Build();
-        }
     }
 }

@@ -1,26 +1,25 @@
-﻿using Google.Apis.Services;
-using Google.Apis.YouTube.v3;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
+using YoutubeApiHandler.Results;
 
 namespace YoutubeApiHandler
 {
-    using YoutubeApiHandler.Results;
-
     public class YoutubeClient
     {
-        public static string ApiKey { private get; set; }
-        
         private readonly YouTubeService _youtubeService;
 
         public YoutubeClient()
         {
-            _youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            _youtubeService = new YouTubeService(new BaseClientService.Initializer
             {
                 ApiKey = ApiKey,
                 ApplicationName = "AtlasBot"
             });
         }
+
+        public static string ApiKey { private get; set; }
 
         public async Task<YoutubeChannelResult> GetYouTuberByNameAsync(string name)
         {
@@ -31,11 +30,8 @@ namespace YoutubeApiHandler
 
             var result = await searchList.ExecuteAsync();
             var channel = result.Items.FirstOrDefault(x => x.Id.Kind == "youtube#channel");
-            if (channel == null)
-            {
-                return null;
-            }
-            
+            if (channel == null) return null;
+
             var resultObject = new YoutubeChannelResult
             {
                 Url = $"https://youtube.com/channel/{channel.Id.ChannelId}",
@@ -48,25 +44,21 @@ namespace YoutubeApiHandler
             channelSearch.Id = channel.Id.ChannelId;
             var channelResult = await channelSearch.ExecuteAsync();
 
-            if (channelResult?.Items == null || !channelResult.Items.Any())
-            {
-                return null;
-            }
+            if (channelResult?.Items == null || !channelResult.Items.Any()) return null;
 
             var firstItem = channelResult.Items.FirstOrDefault();
             if (firstItem != null && firstItem.Statistics.SubscriberCount.HasValue)
-            {
                 resultObject.SubscriberCount = firstItem.Statistics.SubscriberCount.Value;
-            }
 
-            var videoRequest = this._youtubeService.Search.List("snippet");
+            var videoRequest = _youtubeService.Search.List("snippet");
             videoRequest.ChannelId = channel.Id.ChannelId;
             videoRequest.Type = "video";
             videoRequest.Order = SearchResource.ListRequest.OrderEnum.ViewCount;
             videoRequest.MaxResults = 5;
             var videosResult = await videoRequest.ExecuteAsync();
-            
-            resultObject.Videos = videosResult.Items.Select(x => new VideoResult($"https://youtube.com/v?id={x.Id.VideoId}", x.Snippet.Title)).ToList();
+
+            resultObject.Videos = videosResult.Items
+                .Select(x => new VideoResult($"https://youtube.com/v?id={x.Id.VideoId}", x.Snippet.Title)).ToList();
             return resultObject;
         }
     }

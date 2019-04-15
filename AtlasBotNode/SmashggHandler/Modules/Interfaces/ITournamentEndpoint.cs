@@ -1,5 +1,5 @@
-﻿using SmashggHandler.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SmashggHandler.Models;
 
 namespace SmashggHandler.Modules.Interfaces
 {

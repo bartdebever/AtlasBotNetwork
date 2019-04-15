@@ -1,24 +1,16 @@
-﻿using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators;
-using AtlasBotNode.Helpers;
-using AtlasBotNode.Loggers;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using System;
 using System.Threading.Tasks;
 using AtlasBotNode.Communication;
 using AtlasBotNode.Configuration;
 using AtlasBotNode.Configuration.Models;
+using AtlasBotNode.Helpers;
+using AtlasBotNode.Loggers;
 using ChampionGgApiHandler;
-using Microsoft.Extensions.Configuration;
-
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using SmashggNet;
-
 using SpeedrunAPIHandler;
 using YoutubeApiHandler;
 
@@ -26,10 +18,10 @@ namespace AtlasBotNode
 {
     public class Program
     {
-        private CommandService _commands;
-        private DiscordSocketClient _client;
-        private IServiceProvider _services;
         private static BaseConfiguration _configuration;
+        private DiscordSocketClient _client;
+        private CommandService _commands;
+        private IServiceProvider _services;
 
         private static void Main(string[] args)
         {
@@ -38,7 +30,7 @@ namespace AtlasBotNode
         }
 
         /// <summary>
-        /// Start the Discord Bot process.
+        ///     Start the Discord Bot process.
         /// </summary>
         /// <returns>An awaitable task.</returns>
         private async Task Start()
@@ -72,7 +64,7 @@ namespace AtlasBotNode
         }
 
         /// <summary>
-        /// Installs the commands into Discord.net and allows them to run.
+        ///     Installs the commands into Discord.net and allows them to run.
         /// </summary>
         /// <returns>An awaitable task.</returns>
         private async Task InstallCommands()
@@ -83,10 +75,7 @@ namespace AtlasBotNode
             // Add all modules specified in the config file.
             var moduleLoader = new ModuleLoader();
             var modules = moduleLoader.GetModules(_configuration.Modules);
-            foreach (var module in modules)
-            {
-                await _commands.AddModuleAsync(module, null);
-            }
+            foreach (var module in modules) await _commands.AddModuleAsync(module, null);
         }
 
         private async Task HandleCommand(SocketMessage messageParam)
@@ -108,7 +97,7 @@ namespace AtlasBotNode
         }
 
         /// <summary>
-        /// Sets up the API keys for the API wrappers to run from.
+        ///     Sets up the API keys for the API wrappers to run from.
         /// </summary>
         /// <param name="config">The config section that includes all the API keys.</param>
         private static void SetApiKeys(KeyConfiguration config)
@@ -120,7 +109,7 @@ namespace AtlasBotNode
         }
 
         /// <summary>
-        /// Sets up the commander configuration.
+        ///     Sets up the commander configuration.
         /// </summary>
         private void SetupCommander()
         {

@@ -4,7 +4,6 @@ namespace SpeedrunAPIHandler.Models.Runs
 {
     public class RunPlayer
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonProperty("id")] public string Id { get; set; }
     }
 }

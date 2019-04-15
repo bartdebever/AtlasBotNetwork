@@ -18,12 +18,15 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 .WithThumbnailUrl(character.ThumbnailUrl);
 
             if (!string.IsNullOrEmpty(character.Description))
-            {
                 _embedBuilder.AddField("Description", character.Description);
-            }
 
             _embedBuilder.AddField("KH", "Data provided by: http://kuroganehammer.com");
             return this;
+        }
+
+        public Embed Build()
+        {
+            return _embedBuilder.Build();
         }
 
         private void ResetEmbedBuilder()
@@ -32,11 +35,6 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                 .WithColor(Color.DarkGreen)
                 .WithCurrentTimestamp()
                 .WithFooter("Smash4 Module");
-        }
-
-        public Embed Build()
-        {
-            return _embedBuilder.Build();
         }
     }
 }

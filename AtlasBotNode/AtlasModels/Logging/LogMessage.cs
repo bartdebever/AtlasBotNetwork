@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AtlasModels.Logging
 {
@@ -9,7 +7,6 @@ namespace AtlasModels.Logging
     {
         public LogMessage()
         {
-            
         }
 
         public LogMessage(string node, string module, string message, int logLevel, int type)
@@ -20,6 +17,7 @@ namespace AtlasModels.Logging
             LogLevel = logLevel;
             MessageType = type;
         }
+
         public string Node { get; set; }
         public string Module { get; set; }
         public string Message { get; set; }

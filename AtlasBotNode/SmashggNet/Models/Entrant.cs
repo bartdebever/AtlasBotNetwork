@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace SmashggNet.Models
 {
     /// <summary>
-    /// A class to represent the user who has entered a tournament.
+    ///     A class to represent the user who has entered a tournament.
     /// </summary>
     public class Entrant
     {
         /// <summary>
-        /// Gets or sets the name of the entrant.
+        ///     Gets or sets the name of the entrant.
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }

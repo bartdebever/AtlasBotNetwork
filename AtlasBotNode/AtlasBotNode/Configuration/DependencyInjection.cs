@@ -1,17 +1,18 @@
+using AtlasBotNode.EmbedGenerators;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using AtlasBotNode.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace AtlasBotNode.Configuration
 {
-    using EmbedGenerators;
-    using EmbedGenerators.ModuleGenerators;
-    using EmbedGenerators.ModuleGenerators.Interfaces;
-    using Helpers;
-    using Microsoft.Extensions.DependencyInjection;
-
     public static class DependencyInjection
     {
         private static ServiceCollection _serviceCollection;
 
         /// <summary>
-        /// Injects all objects into a <see cref="ServiceCollection"/>. Intended to be used to add dependency injection to the commands.
+        ///     Injects all objects into a <see cref="ServiceCollection" />. Intended to be used to add dependency injection to the
+        ///     commands.
         /// </summary>
         /// <returns>A collection of injectable services.</returns>
         public static ServiceCollection GetServiceCollection()
@@ -25,7 +26,7 @@ namespace AtlasBotNode.Configuration
         }
 
         /// <summary>
-        /// Injects all EmbedGenerators objects into the <see cref="_serviceCollection"/> object.
+        ///     Injects all EmbedGenerators objects into the <see cref="_serviceCollection" /> object.
         /// </summary>
         private static void InjectEmbedGenerators()
         {
@@ -39,7 +40,7 @@ namespace AtlasBotNode.Configuration
         }
 
         /// <summary>
-        /// Injects all helpers objects into the <see cref="_serviceCollection"/> object.
+        ///     Injects all helpers objects into the <see cref="_serviceCollection" /> object.
         /// </summary>
         private static void InjectHelpers()
         {
