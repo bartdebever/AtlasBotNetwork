@@ -80,12 +80,12 @@ namespace AtlasBotNode
             // Hook the MessageReceived Event into our Command Handler
             _client.MessageReceived += HandleCommand;
 
-            //Add all modules specified in the config file.
+            // Add all modules specified in the config file.
             var moduleLoader = new ModuleLoader();
             var modules = moduleLoader.GetModules(_configuration.Modules);
             foreach (var module in modules)
             {
-                await _commands.AddModuleAsync(module);
+                await _commands.AddModuleAsync(module, null);
             }
         }
 
