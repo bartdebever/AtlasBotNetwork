@@ -1,11 +1,16 @@
-﻿using AtlasBotNode.EmbedGenerators;
-using AtlasBotNode.EmbedGenerators.ModuleGenerators;
+﻿using System;
+using System.Threading.Tasks;
+using AtlasBotNode.Communication;
+using AtlasBotNode.Configuration;
+using AtlasBotNode.Configuration.Models;
 using AtlasBotNode.Helpers;
 using AtlasBotNode.Loggers;
+using ChampionGgApiHandler;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using SmashggNet;
 using System;
 using System.IO;
 using System.Reflection;
@@ -22,15 +27,17 @@ namespace AtlasBotNode
     public class Program
     {
         private IServiceProvider _services;
-        private static IConfiguration _config;
 
         private static void Main(string[] args)
         {
-            _config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false).Build();
+            _configuration = new ConfigurationLoader().CreateConfiguration("appsettings.json");
             new Program().Start().GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        ///     Start the Discord Bot process.
+        /// </summary>
+        /// <returns>An awaitable task.</returns>
         private async Task Start()
         {
             var discordCommandConfig = new DiscordCommandConfiguration();
@@ -75,7 +82,11 @@ namespace AtlasBotNode
             await Commands.ExecuteAsync(context, argPos, _services);
         }
 
-        private static void SetApiKeys(IConfiguration config)
+        /// <summary>
+        ///     Sets up the API keys for the API wrappers to run from.
+        /// </summary>
+        /// <param name="config">The config section that includes all the API keys.</param>
+        private static void SetApiKeys(KeyConfiguration config)
         {
             KeyStorage.ApiKey = _config.GetSection("keys:champion.gg").Value;
             SpeedrunAPIClient.ApiKey = _config.GetSection("keys:speedrun").Value;

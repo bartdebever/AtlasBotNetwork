@@ -1,13 +1,9 @@
-﻿using Discord;
+﻿using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using Discord;
 using KhApiHandler.Models;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
-    public interface ISmash4EmbedGenerator : IEmbedGenerator
-    {
-        ISmash4EmbedGenerator CreateCharacterEmbed(Character character);
-    }
-
     public class Smash4EmbedGenerator : ISmash4EmbedGenerator
     {
         private EmbedBuilder _embedBuilder;
@@ -16,27 +12,29 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         {
             ResetEmbedBuilder();
 
-            _embedBuilder.WithTitle(character.Name);
-            _embedBuilder.WithUrl(character.FullUrl);
-            _embedBuilder.WithImageUrl(character.MainImageUrl);
-            _embedBuilder.WithThumbnailUrl(character.ThumbnailUrl);
+            _embedBuilder.WithTitle(character.Name)
+                .WithUrl(character.FullUrl)
+                .WithImageUrl(character.MainImageUrl)
+                .WithThumbnailUrl(character.ThumbnailUrl);
+
             if (!string.IsNullOrEmpty(character.Description))
                 _embedBuilder.AddField("Description", character.Description);
+
             _embedBuilder.AddField("KH", "Data provided by: http://kuroganehammer.com");
             return this;
-        }
-
-        private void ResetEmbedBuilder()
-        {
-            _embedBuilder = new EmbedBuilder();
-            _embedBuilder.WithColor(Color.DarkGreen);
-            _embedBuilder.WithCurrentTimestamp();
-            _embedBuilder.WithFooter("Smash4 Module");
         }
 
         public Embed Build()
         {
             return _embedBuilder.Build();
+        }
+
+        private void ResetEmbedBuilder()
+        {
+            _embedBuilder = new EmbedBuilder()
+                .WithColor(Color.DarkGreen)
+                .WithCurrentTimestamp()
+                .WithFooter("Smash4 Module");
         }
     }
 }

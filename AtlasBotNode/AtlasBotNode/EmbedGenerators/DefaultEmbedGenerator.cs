@@ -1,13 +1,7 @@
-﻿using AtlasBotNode.Loggers;
-using Discord;
+﻿using Discord;
 
 namespace AtlasBotNode.EmbedGenerators
 {
-    public interface IDefaultEmbedGenerator : IEmbedGenerator
-    {
-        DefaultEmbedGenerator GenerateNotFoundEmbed(string module, string command, string title, string message);
-    }
-
     public class DefaultEmbedGenerator : IDefaultEmbedGenerator
     {
         private readonly EmbedBuilder _embedBuilder;
@@ -24,10 +18,10 @@ namespace AtlasBotNode.EmbedGenerators
 
         public DefaultEmbedGenerator GenerateNotFoundEmbed(string module, string command, string title, string message)
         {
-            ModuleLogger.Logger(LogSeverity.Warning, module, command, message);
-            _embedBuilder.AddField(title, message);
-            _embedBuilder.WithColor(Color.Red);
-            _embedBuilder.WithTitle("Not found");
+            _embedBuilder.AddField(title, message)
+                .WithColor(Color.Red)
+                .WithTitle("Not found");
+
             return this;
         }
     }

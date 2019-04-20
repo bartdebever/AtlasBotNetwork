@@ -1,48 +1,38 @@
-﻿using AtlasBotNode.Helpers;
-using Discord;
-using SpeedrunAPIHandler.Models;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
+using AtlasBotNode.EmbedGenerators.ModuleGenerators.Interfaces;
+using AtlasBotNode.Helpers;
+using Discord;
+using SpeedrunAPIHandler.Models.Leaderboards;
 
 namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 {
-    public interface ISpeedrunEmbedGenerator : IEmbedGenerator
-    {
-        ISpeedrunEmbedGenerator CreateLeaderboardEmbed(Leaderboard leaderboard);
-
-        ISpeedrunEmbedGenerator CreateWorldRecordEmbed(Leaderboard leaderboard);
-    }
-
     public class SpeedrunEmbedGenerator : ISpeedrunEmbedGenerator
     {
         private EmbedBuilder _embedBuilder;
-
-        private void ResetEmbedBuilder()
-        {
-            _embedBuilder = new EmbedBuilder();
-            _embedBuilder.WithColor(Color.Red);
-            _embedBuilder.WithCurrentTimestamp();
-            _embedBuilder.WithFooter("Speedrun.com API");
-        }
 
         public ISpeedrunEmbedGenerator CreateLeaderboardEmbed(Leaderboard leaderboard)
         {
             ResetEmbedBuilder();
 
-            _embedBuilder.WithTitle($"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} Leaderboard");
+            _embedBuilder.WithTitle(
+                $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} Leaderboard");
             _embedBuilder.WithUrl(leaderboard.WebLink);
             var stringBuilder = new StringBuilder();
             foreach (var run in leaderboard.RunList)
             {
                 var player = leaderboard.Players.FirstOrDefault(x => x.Id == run.Run.Players[0]?.Id);
-                stringBuilder.AppendLine($"**{StringCleanerHelper.NumberToRanking(run.Place)}**: {player?.Names["international"]} {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}");
+                stringBuilder.AppendLine(
+                    $"**{StringCleanerHelper.NumberToRanking(run.Place)}**: {player?.Names["international"]}" +
+                    $" {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}");
             }
+
             _embedBuilder.AddField("Runs", stringBuilder);
 
             var icon = leaderboard.Game.Assets["icon"];
-            if (icon != null)
-                _embedBuilder.WithThumbnailUrl(icon.Uri);
+            if (icon != null) _embedBuilder.WithThumbnailUrl(icon.Uri);
+
             return this;
         }
 
@@ -52,15 +42,15 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
 
             var run = leaderboard.RunList[0];
             var runner = leaderboard.Players.FirstOrDefault(x => x.Id == run.Run.Players[0].Id);
-            if (run == null || runner == null)
-                throw new Exception();
+            if (run == null || runner == null) throw new Exception();
+
             _embedBuilder.WithTitle(
-                $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} World Record");
-            _embedBuilder.WithUrl(leaderboard.WebLink);
-            _embedBuilder.AddField("World Record",
-                $"**{runner.Names["international"]}:** {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}\n" +
-                $"Check out the run at: {run.Run.WebLink}"
-            );
+                    $"{leaderboard.Game.Names["international"]} {leaderboard.GetCategoryName} World Record")
+                .WithUrl(leaderboard.WebLink)
+                .AddField("World Record",
+                    $"**{runner.Names["international"]}:** {StringCleanerHelper.SpeedrunTimeConverter(run.Run.Time.Primary)}\n" +
+                    $"Check out the run at: {run.Run.WebLink}"
+                );
 
             if (leaderboard.Game.Assets.ContainsKey("cover-medium"))
                 _embedBuilder.WithThumbnailUrl(leaderboard.Game.Assets["cover-medium"].Uri);
@@ -74,6 +64,14 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
         public Embed Build()
         {
             return _embedBuilder.Build();
+        }
+
+        private void ResetEmbedBuilder()
+        {
+            _embedBuilder = new EmbedBuilder()
+                .WithColor(Color.Red)
+                .WithCurrentTimestamp()
+                .WithFooter("Speedrun.com API");
         }
     }
 }

@@ -30,16 +30,12 @@ namespace AtlasBotNode.Helpers
 
         public static string SpeedrunTimeConverter(string time)
         {
-            string[] characters = { "PT", "H", "M", "S" };
+            string[] characters = {"PT", "H", "M", "S"};
             time = characters.Aggregate(time, (current, character) => current.Replace(character, ":"));
             var chars = new List<string>(time.Split(":"));
             for (var i = 0; i < chars.Count; i++)
-            {
                 if (chars[i].Length == 1 && i != 0)
-                {
                     chars[i] = "0" + chars[i];
-                }
-            }
             chars.RemoveAt(chars.Count - 1);
             chars.RemoveAt(0);
             return chars.Aggregate((a, b) => a + ":" + b);
@@ -81,7 +77,7 @@ namespace AtlasBotNode.Helpers
 
         public static string ToEmoji(this int id)
         {
-            var emote = EmojiGetterHelper.GetEmoji($"{id}");
+            var emote = EmojiHelper.GetEmoji($"{id}");
             if (emote == null)
                 return id.ToString();
             return emote.ToString();

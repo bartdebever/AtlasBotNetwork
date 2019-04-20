@@ -4,66 +4,37 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Threading;
-using AtlasBotCommander.Loggers;
+using AtlasBotCommander.AtlasBotNode;
 using AtlasModels.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace AtlasBotCommander.Communication
 {
-    using NLog;
-
-    /// <summary>
-    /// A class that manages all nodes and the commands that the nodes are allowed to send.
-    /// </summary>
     public class NodeHub
     {
-        /// <summary>
-        /// The logger that is used 
-        /// </summary>
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// A list of nodes that are active.
-        /// </summary>
-        private readonly List<AtlasNode> _nodes = new List<AtlasNode>();
-
-        /// <summary>
-        /// The Ip of the server.
-        /// </summary>
+        private readonly List<AtlasNode> _nodes;
         private readonly string _ip = "127.0.0.1";
-
-        /// <summary>
-        /// The port used for the server.
-        /// </summary>
         private readonly int _port = 6677;
-
-        /// <summary>
-        /// The socket that is being listened to
-        /// </summary>
+        private readonly ILogger<NodeHub> _logger;
         private Socket _listener;
-
-        /// <summary>
-        /// The token that clients need to authorize with.
-        /// </summary>
         private string _token => "AtlasTestToken";
 
-        /// <summary>
-        /// Starts the listening process on the <see cref="_listener"/> socket.
-        /// </summary>
-        /// <exception cref="ArgumentNullException">When the IP is not set.</exception>
+        public NodeHub(ILogger<NodeHub> logger)
+        {
+            _logger = logger;
+            _nodes = new List<AtlasNode>();
+        }
+
         public void Listen()
         {
-            if (string.IsNullOrEmpty(_ip))
-            {
-                throw new ArgumentNullException(nameof(_ip));
-            }
-
             var ipAddress = IPAddress.Parse(_ip);
             var localEndPoint = new IPEndPoint(ipAddress, _port);
             _listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _listener.Bind(localEndPoint);
             _listener.Listen(100);
-            _logger.Info($"Listening for nodes on {localEndPoint.Address} {_port}");
+            _logger.LogInformation($"Listening for nodes on {localEndPoint.Address} {_port}");
             while (true)
             {
                 var socket = _listener.Accept();
@@ -73,13 +44,10 @@ namespace AtlasBotCommander.Communication
             }
         }
 
-        /// <summary>
-        /// Waits and listens for data from the node.
-        /// </summary>
-        /// <param name="node">The node wanting to be listened to.</param>
         private void ListenForData(AtlasNode node)
         {
-            while (true)
+            var interupted = false;
+            while (!interupted)
             {
                 var data = new byte[1024 * 1024 * 50];
                 try
@@ -88,8 +56,11 @@ namespace AtlasBotCommander.Communication
                 }
                 catch (SocketException)
                 {
-                    _logger.Info($"{node.Name} Disconnected.");
+                    var message = $"{node.Name} disconnected";
+                    _logger.LogWarning(message);
+                    Program.LogMessage($"**{message}**").GetAwaiter().GetResult();
                     _nodes.Remove(node);
+
                     return;
                 }
 
@@ -100,31 +71,33 @@ namespace AtlasBotCommander.Communication
                     HandleMessage(message, ref node);
                 }
             }
+
         }
 
-        /// <summary>
-        /// Handles the message given by the node.
-        /// </summary>
-        /// <param name="message">The message that has been send by the <paramref name="node"/></param>
-        /// <param name="node">A reference to the node that send the message.</param>
         private void HandleMessage(LogMessage message, ref AtlasNode node)
         {
+            string textMessage;
             switch (message.MessageType)
             {
                 case 0:
                     if (message.Message != _token)
                     {
+                        textMessage =
+                            $"{message.Node} tried to register with an invalid token, IP: {(node.Socket.RemoteEndPoint as IPEndPoint)?.Address}";
                         _nodes.Remove(node);
-                        _logger.Warn($"Invalid token detected for ip {(node.Socket.RemoteEndPoint as IPEndPoint)?.Address}");
+                        _logger.LogCritical(textMessage);
+                        Program.LogMessage(textMessage).GetAwaiter().GetResult();
                         node.Socket.Disconnect(true);
                         return;
                     }
-
-                    _logger.Info($"{message.Node} {message.Module}: {message.Message}");
+                    textMessage = $"[{message.Node}] [{message.Module}]: {message.Message}";
+                    _logger.LogInformation(textMessage);
                     node.Name = message.Node;
                     break;
                 case 1:
-                    _logger.Info($"{message.Node} {message.Module}: {message.Message}");
+                    textMessage = $"[{message.Node}] [{message.Module}]: {message.Message}";
+                    _logger.LogInformation(textMessage);
+                    Program.LogMessage(textMessage).GetAwaiter().GetResult();
                     break;
             }
         }
