@@ -4,6 +4,7 @@ using AtlasBotNode.Helpers;
 using Discord.Commands;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AtlasBotNode.Configuration;
 
 namespace AtlasBotNode.Modules
 {
@@ -23,7 +24,7 @@ namespace AtlasBotNode.Modules
         [Summary("Gives you the list of commands available.")]
         public async Task HelpList()
         {
-            var embed = _helpEmbedGenerator.GenerateHelpListEmbed(DiscordCommandHelper.CommandService.Modules).Build();
+            var embed = _helpEmbedGenerator.GenerateHelpListEmbed(DiscordCommandConfiguration.CommandService.Modules).Build();
 
             await ReplyAsync("", embed: embed);
         }

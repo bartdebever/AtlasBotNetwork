@@ -1,6 +1,7 @@
 ﻿using Discord;
 using System.Collections.Generic;
 using System.Linq;
+using AtlasBotNode.Configuration;
 
 namespace AtlasBotNode.Helpers
 {
@@ -14,7 +15,7 @@ namespace AtlasBotNode.Helpers
                 text += '_';
             foreach (var emojiServer in _emojiServers)
             {
-                var server = DiscordCommandHelper.Client.Guilds.FirstOrDefault(x => x.Id == emojiServer);
+                var server = DiscordCommandConfiguration.Client.Guilds.FirstOrDefault(x => x.Id == emojiServer);
                 var emote =  server?.Emotes.FirstOrDefault(x => x.Name == text);
                 if (emote != null)
                     return emote;

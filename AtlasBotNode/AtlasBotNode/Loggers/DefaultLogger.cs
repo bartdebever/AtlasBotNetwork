@@ -2,6 +2,7 @@
 using Discord;
 using System;
 using System.Threading.Tasks;
+using AtlasBotNode.Configuration;
 
 namespace AtlasBotNode.Loggers
 {
@@ -36,7 +37,7 @@ namespace AtlasBotNode.Loggers
 
         private static async Task LogErrorToOwner(LogMessage message)
         {
-            var bort = DiscordCommandHelper.Client.GetUser(111211693870161920);
+            var bort = DiscordCommandConfiguration.Client.GetUser(111211693870161920);
             var embedBuilder = new EmbedBuilder();
             embedBuilder.WithColor(Color.Red);
             embedBuilder.WithTitle("Issue");
