@@ -42,7 +42,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                     }
                     stringBuilder.Append($": {command.Summary}\n");
                 }
-                _embedBuilder.AddInlineField(module.Name, stringBuilder.ToString());
+                _embedBuilder.AddField(module.Name, stringBuilder.ToString(), true);
             }
 
             return this;

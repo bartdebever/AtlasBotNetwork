@@ -69,7 +69,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                     stringBuilder.AppendLine(@event.Name);
                 }
                 if (stringBuilder.Length > 0)
-                    _builder.AddInlineField(game.Name, stringBuilder.ToString());
+                    _builder.AddField(game.Name, stringBuilder.ToString(), true);
             }
             return this;
         }
@@ -94,7 +94,7 @@ namespace AtlasBotNode.EmbedGenerators.ModuleGenerators
                     if (i == max - 1 && max != videogames.Count())
                         stringBuilder.AppendLine($"And {videogames.Count() - max} more");
                 }
-                _builder.AddInlineField(tournament.Name, $"At {tournament.StartDate.ToLongDateString()}\n**Games:** \n{stringBuilder}");
+                _builder.AddField(tournament.Name, $"At {tournament.StartDate.ToLongDateString()}\n**Games:** \n{stringBuilder}", true);
             }
             return this;
         }

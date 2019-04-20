@@ -108,31 +108,31 @@ namespace AtlasBotNode
                 switch (child.Value)
                 {
                     case "All":
-                        await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
+                        await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
                         return;
                     case "Smash4":
-                        await _commands.AddModuleAsync<Smash4Module>();
+                        await _commands.AddModuleAsync<Smash4Module>(null);
                         break;
                     case "Speedrun":
-                        await _commands.AddModuleAsync<SpeedrunModule>();
+                        await _commands.AddModuleAsync<SpeedrunModule>(null);
                         break;
                     case "Help":
-                        await _commands.AddModuleAsync<HelpModule>();
+                        await _commands.AddModuleAsync<HelpModule>(null);
                         break;
                     case "Role":
-                        await _commands.AddModuleAsync<RoleModule>();
+                        await _commands.AddModuleAsync<RoleModule>(null);
                         break;
                     case "Smashgg":
-                        await _commands.AddModuleAsync<SmashggModule>();
+                        await _commands.AddModuleAsync<SmashggModule>(null);
                         break;
                     case "Youtube":
-                        await _commands.AddModuleAsync<YoutubeModule>();
+                        await _commands.AddModuleAsync<YoutubeModule>(null);
                         break;
                     case "Quiz":
-                        await _commands.AddModuleAsync<QuizModule>();
+                        await _commands.AddModuleAsync<QuizModule>(null);
                         break;
                     case "Test":
-                        await _commands.AddModuleAsync<TestModule>();
+                        await _commands.AddModuleAsync<TestModule>(null);
                         break;
                 }
             }
