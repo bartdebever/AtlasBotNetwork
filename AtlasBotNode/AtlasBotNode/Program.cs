@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using AtlasBotNode.Communication;
+using AtlasBotNode.Configuration;
 using AtlasBotNode.Modules;
 using ChampionGgApiHandler;
 using Microsoft.Extensions.Configuration;
@@ -58,8 +59,12 @@ namespace AtlasBotNode
                 _client.Log += DefaultLogger.Logger;
                 _commands.Log += DefaultLogger.Logger;
             }
-            
-            await InjectDependencies();
+
+            _services = new ServiceCollection()
+                .AddEmbedGenerators()
+                .BuildServiceProvider();
+
+            await InstallCommands();
 
 
             await _client.LoginAsync(TokenType.Bot, section.GetSection("discord").Value);
@@ -108,51 +113,34 @@ namespace AtlasBotNode
                 switch (child.Value)
                 {
                     case "All":
-                        await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
+                        await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
                         return;
                     case "Smash4":
-                        await _commands.AddModuleAsync<Smash4Module>(null);
+                        await _commands.AddModuleAsync<Smash4Module>(_services);
                         break;
                     case "Speedrun":
-                        await _commands.AddModuleAsync<SpeedrunModule>(null);
+                        await _commands.AddModuleAsync<SpeedrunModule>(_services);
                         break;
                     case "Help":
-                        await _commands.AddModuleAsync<HelpModule>(null);
+                        await _commands.AddModuleAsync<HelpModule>(_services);
                         break;
                     case "Role":
-                        await _commands.AddModuleAsync<RoleModule>(null);
+                        await _commands.AddModuleAsync<RoleModule>(_services);
                         break;
                     case "Smashgg":
-                        await _commands.AddModuleAsync<SmashggModule>(null);
+                        await _commands.AddModuleAsync<SmashggModule>(_services);
                         break;
                     case "Youtube":
-                        await _commands.AddModuleAsync<YoutubeModule>(null);
+                        await _commands.AddModuleAsync<YoutubeModule>(_services);
                         break;
                     case "Quiz":
-                        await _commands.AddModuleAsync<QuizModule>(null);
+                        await _commands.AddModuleAsync<QuizModule>(_services);
                         break;
                     case "Test":
-                        await _commands.AddModuleAsync<TestModule>(null);
+                        await _commands.AddModuleAsync<TestModule>(_services);
                         break;
                 }
             }
-        }
-        private async Task InjectDependencies()
-        {
-            var serviceCollection = new ServiceCollection();
-
-            serviceCollection.AddTransient<IDefaultEmbedGenerator, DefaultEmbedGenerator>();
-            serviceCollection.AddTransient<IHelpEmbedGenerator, HelpEmbedGenerator>();
-            serviceCollection.AddTransient<IInputSanitizer, InputSanitizer>();
-            serviceCollection.AddTransient<ISmashggEmbedGenerator, SmashggEmbedGenerator>();
-            serviceCollection.AddTransient<ISpeedrunEmbedGenerator, SpeedrunEmbedGenerator>();
-            serviceCollection.AddTransient<ISmash4EmbedGenerator, Smash4EmbedGenerator>();
-            serviceCollection.AddTransient<ILeagueEmbedGenerator, LeagueEmbedGenerator>();
-            serviceCollection.AddTransient<IYoutubeEmbedGenerator, YoutubeEmbedGenerator>();
-
-            _services = serviceCollection.BuildServiceProvider();
-
-            await InstallCommands();
         }
     }
 }
