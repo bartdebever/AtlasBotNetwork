@@ -10,7 +10,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using AtlasBotNode.Communication;
 using AtlasBotNode.Configuration;
 using AtlasBotNode.Modules;
 using ChampionGgApiHandler;
@@ -43,22 +42,9 @@ namespace AtlasBotNode
             SetApiKeys(section);
             DiscordCommandHelper.CommandService = _commands;
             DiscordCommandHelper.Client = _client;
-            var commanderSection = _config.GetSection("commander");
-            if (Convert.ToBoolean(commanderSection.GetSection("use-commander").Value))
-            {
-                var commanderConnector = new CommanderConnector(commanderSection.GetSection("commander-ip").Value,
-                    Convert.ToInt32(commanderSection.GetSection("commander-port").Value), commanderSection.GetSection("node-name").Value,
-                    commanderSection.GetSection("commander-token").Value);
-                commanderConnector.Connect();
-                commanderConnector.Register();
-                _client.Log += commanderConnector.LogDiscord;
-                _commands.Log += commanderConnector.LogDiscord;
-            }
-            else
-            {
-                _client.Log += DefaultLogger.Logger;
-                _commands.Log += DefaultLogger.Logger;
-            }
+
+            _client.Log += DefaultLogger.Logger;
+            _commands.Log += DefaultLogger.Logger;
 
             _services = new ServiceCollection()
                 .AddEmbedGenerators()
